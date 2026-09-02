@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Métodos Numéricos — LMDA · MRF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="hero">
+        <div class="hero__text">
+            <p class="hero__kicker">Proyecto académico</p>
+            <h1>Métodos Numéricos</h1>
+            <p class="hero__intro">
+                Implementación y análisis de algoritmos para resolver problemas
+                matemáticos complejos
+            </p>
+        </div>
+        <svg class="hero__curve" viewBox="0 0 240 160" aria-hidden="true">
+            <line x1="10" y1="150" x2="230" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
+            <line x1="10" y1="10" x2="10" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
+            <path d="M 10 20 C 60 20, 70 140, 120 140 S 180 148, 230 149.5"
+                  fill="none" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="10" cy="20" r="3" fill="var(--accent)"/>
+            <circle cx="70" cy="118" r="3" fill="var(--accent)" opacity="0.7"/>
+            <circle cx="120" cy="140" r="3" fill="var(--accent)" opacity="0.5"/>
+            <circle cx="230" cy="149.5" r="3" fill="var(--accent)" opacity="0.3"/>
+        </svg>
+    </header>
+
+    <main>
+        <section class="section" aria-labelledby="contenido-titulo">
+            <h2 id="contenido-titulo">Contenido del proyecto</h2>
+            <nav class="method-list" aria-label="Métodos implementados">
+                <a class="method-card" href="PuntoFijo.html">
+                    <div class="method-card__body">
+                        <h3>Método del Punto Fijo</h3>
+                        <p>Aproximación de raíces mediante iteración de una función de punto fijo.</p>
+                    </div>
+                    <span class="method-card__tag">g(x) = x</span>
+                </a>
+
+                <a class="method-card" href="Biseccion.html">
+                    <div class="method-card__body">
+                        <h3>Método de Bisección</h3>
+                        <p>Búsqueda de raíces por bisección sucesiva de un intervalo cerrado.</p>
+                    </div>
+                    <span class="method-card__tag">[a, b]</span>
+                </a>
+
+                <a class="method-card" href="Secante.html">
+                    <div class="method-card__body">
+                        <h3>Método de la Secante</h3>
+                        <p>Iteración de aproximaciones lineales para encontrar raíces de funciones.</p>
+                    </div>
+                    <span class="method-card__tag">f(x) = 0</span>
+                </a>
+
+                <a class="method-card" href="FalsaPosicion.html">
+                    <div class="method-card__body">
+                        <h3>Método de la Falsa Posición</h3>
+                        <p>Mejora de la bisección usando una aproximación lineal para encontrar raíces.</p>
+                    </div>
+                    <span class="method-card__tag">[a, b]</span>
+                </a>
+
+                <a class="method-card" href="NewtonRaphson.html">
+                    <div class="method-card__body">
+                        <h3>Método de Newton-Raphson</h3>
+                        <p>Convergencia cuadrática usando la derivada de la función objetivo.</p>
+                    </div>
+                    <span class="method-card__tag">f'(x)</span>
+                </a>
+                
+            </nav>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Desarrollado por Luna Martínez Diego Alberto y Moran Ramirez Fernando</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método de la Secante — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page">
+        <a class="back-link" href="index.html">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Método iterativo</p>
+            <h1>Método de Bisección</h1>
+            <p class="page-header__intro">
+                Método numérico para encontrar raíces de funciones continuas en un intervalo dado.
+            </p>
+        </header>
+
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3 (o x^2 - 3)">
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="point-a">Punto a</label>
+                    <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                </div>
+                <div class="field">
+                    <label for="point-b">Punto b</label>
+                    <input type="text" id="point-b" placeholder="Ejemplo: 2">
+                </div>
+                <div class="field">
+                    <label for="tolerance">Error máximo</label>
+                    <input type="text" id="tolerance" placeholder="Ejemplo: 0.0001">
+                </div>
+                <div class="field">
+                    <label for="max-iterations">Iteraciones máximas</label>
+                    <input type="text" id="max-iterations" placeholder="Ejemplo: 100">
+                </div>
+            </div>
+
+            <button class="btn" id="calcular-secante" type="button">Calcular raíz</button>
+        </section>
+
+        <section class="panel" aria-labelledby="table-title">
+            <h2 id="table-title">Iteraciones</h2>
+            <div class="table-wrap">
+                <table id="result-table">
+                    <thead>
+                        <tr>
+                            <th>Iteración</th>
+                            <th>p0</th>
+                            <th>p1</th>
+                            <th>p2</th>
+                            <th>f(p2)</th>
+                            <th>Error</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-table-body">
+                        <!-- Los resultados se agregan aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="result-panel" aria-live="polite">
+            <h2>Resultado</h2>
+            <p id="result"></p>
+            <p id="error-message" class="error-text"></p>
+        </section>
+    </div>
+
+    <script src="Secante.js"></script>
+</body>
+</html>
