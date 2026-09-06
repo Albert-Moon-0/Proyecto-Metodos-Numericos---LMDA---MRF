@@ -23,9 +23,9 @@
 
         <header class="page-header">
             <p class="page-header__kicker">Método iterativo</p>
-            <h1>Método de Bisección</h1>
+            <h1>Método de la Secante</h1>
             <p class="page-header__intro">
-                Método numérico para encontrar raíces de funciones continuas en un intervalo dado.
+                Método numérico para encontrar raíces de funciones continuas a partir de dos aproximaciones iniciales.
             </p>
         </header>
 
@@ -34,16 +34,16 @@
 
             <div class="field">
                 <label for="function-input">Función f(x)</label>
-                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3 (o x^2 - 3)">
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3, sin(x) + cos(x), exp(x) - 5, e**x - 5">
             </div>
 
             <div class="field-row">
                 <div class="field">
-                    <label for="point-a">Punto a</label>
+                    <label for="point-a">Punto p0</label>
                     <input type="text" id="point-a" placeholder="Ejemplo: 0">
                 </div>
                 <div class="field">
-                    <label for="point-b">Punto b</label>
+                    <label for="point-b">Punto p1</label>
                     <input type="text" id="point-b" placeholder="Ejemplo: 2">
                 </div>
                 <div class="field">
@@ -87,6 +87,7 @@
         </section>
     </div>
 
-    <script src="Secante.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/secante.js"></script>
 </body>
 </html>

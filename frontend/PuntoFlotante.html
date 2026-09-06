@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Método del Punto Fijo — Métodos Numéricos</title>
+    <title>Punto Flotante (IEEE 754) — Métodos Numéricos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,29 +22,24 @@
         </a>
 
         <header class="page-header">
-            <p class="page-header__kicker">Método iterativo</p>
-            <h1>Método del Punto Fijo</h1>
+            <p class="page-header__kicker">Representación numérica</p>
+            <h1>Punto Flotante (IEEE 754)</h1>
             <p class="page-header__intro">
-                Conversión entre representación decimal y una representación binaria
-                de punto fijo con signo, característica y mantisa configurables.
+                Conversión entre representación decimal y su representación binaria
+                en punto flotante, siguiendo el estándar IEEE 754 en media precisión
+                (16 bits), precisión simple (32 bits) o precisión doble (64 bits).
             </p>
         </header>
 
         <section class="panel" aria-labelledby="config-title">
             <h2 id="config-title">Configuración del formato</h2>
-            <div class="field-row">
-                <div class="field">
-                    <label for="total-bits">Bits totales</label>
-                    <input type="text" id="total-bits" placeholder="Ejemplo: 32">
-                </div>
-                <div class="field">
-                    <label for="characteristic-bits">Bits de característica</label>
-                    <input type="text" id="characteristic-bits" placeholder="Ejemplo: 8">
-                </div>
-                <div class="field">
-                    <label for="mantissa-bits">Bits de mantisa</label>
-                    <input type="text" id="mantissa-bits" placeholder="Ejemplo: 23">
-                </div>
+            <div class="field">
+                <label for="bits-select">Cantidad de bits (IEEE 754)</label>
+                <select id="bits-select">
+                    <option value="16">16 bits — media precisión (1 signo, 5 exponente, 10 mantisa)</option>
+                    <option value="32" selected>32 bits — precisión simple (1 signo, 8 exponente, 23 mantisa)</option>
+                    <option value="64">64 bits — precisión doble (1 signo, 11 exponente, 52 mantisa)</option>
+                </select>
             </div>
         </section>
 
@@ -52,8 +47,8 @@
             <section class="panel" aria-labelledby="bin-dec-title">
                 <h2 id="bin-dec-title">Binario → Decimal</h2>
                 <div class="field">
-                    <label for="binary-input">Representación binaria</label>
-                    <input type="text" id="binary-input" placeholder="Ejemplo: 101101.011 o 01000000101110100000000000000000">
+                    <label for="binary-input">Representación binaria (IEEE 754)</label>
+                    <input type="text" id="binary-input" placeholder="Ejemplo: 01000001010110100000000000000000">
                 </div>
                 <button class="btn" id="binary-to-decimal" type="button">Convertir a decimal</button>
             </section>
@@ -75,6 +70,7 @@
         </section>
     </div>
 
-    <script src="PuntoFijo.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/puntoFlotante.js"></script>
 </body>
 </html>

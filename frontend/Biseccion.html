@@ -34,7 +34,7 @@
 
             <div class="field">
                 <label for="function-input">Función f(x)</label>
-                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3 (o x^2 - 3)">
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3, sin(x) + cos(x), exp(x) - 5, e**x - 5">
             </div>
 
             <div class="field-row">
@@ -70,7 +70,8 @@
                             <th>b</th>
                             <th>c</th>
                             <th>f(c)</th>
-                            <th>Error</th>
+                            <th>Error absoluto</th>
+                            <th>Error aproximado (%)</th>
                         </tr>
                     </thead>
                     <tbody id="result-table-body">
@@ -87,6 +88,7 @@
         </section>
     </div>
 
-    <script src="Biseccion.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/biseccion.js"></script>
 </body>
 </html>

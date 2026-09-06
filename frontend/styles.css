@@ -449,3 +449,60 @@ input[type="text"]:focus-visible {
         transition: none;
     }
 }
+/* ---------- Select (agregado para el selector de bits IEEE 754) ---------- */
+
+select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238b96a8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+}
+
+select:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- Estado deshabilitado para botones (llamadas al backend) ---------- */
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---------- Aviso "Próximamente" ---------- */
+
+.notice-panel {
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: 10px;
+    padding: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.notice-panel p {
+    margin: 0 0 0.5rem;
+}
+
+.notice-panel p:last-child {
+    margin-bottom: 0;
+}
+
+.notice-panel code {
+    font-family: var(--font-mono);
+    background: var(--surface-hover);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 0.875em;
+}
