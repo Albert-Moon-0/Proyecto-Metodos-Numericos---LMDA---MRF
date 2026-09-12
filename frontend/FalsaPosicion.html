@@ -7,14 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
     <div class="bg-grid" aria-hidden="true"></div>
 
     <div class="page">
-        <a class="back-link" href="index.html">
+        <a class="back-link" href="../index.html">
             <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -25,21 +25,73 @@
             <p class="page-header__kicker">Método iterativo</p>
             <h1>Método de la Falsa Posición</h1>
             <p class="page-header__intro">
-                Mejora de la bisección usando una aproximación lineal para encontrar raíces.
+                Combina bisección y secante: usa la intersección de la recta secante
+                entre (a, f(a)) y (b, f(b)) para generar la nueva raíz, conservando
+                siempre un intervalo [a, b] donde f(a)·f(b) &lt; 0.
             </p>
         </header>
 
-        <section class="notice-panel">
-            <p><strong>Próximamente.</strong></p>
-            <p>
-                La estructura del proyecto ya está preparada para este método: basta con
-                crear <code>backend/metodos/falsa_posicion.py</code> con su propio
-                Blueprint, agregarlo a la lista <code>MODULOS</code> en
-                <code>backend/metodos/__init__.py</code>, y construir esta página con su
-                script correspondiente en <code>frontend/js/</code>.
-            </p>
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3, sin(x) + cos(x), exp(x) - 5, e**x - 5">
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="point-a">Punto a</label>
+                    <input type="text" id="point-a" placeholder="Ejemplo: 1">
+                </div>
+                <div class="field">
+                    <label for="point-b">Punto b</label>
+                    <input type="text" id="point-b" placeholder="Ejemplo: 2">
+                </div>
+                <div class="field">
+                    <label for="tolerance">Error máximo</label>
+                    <input type="text" id="tolerance" placeholder="Ejemplo: 0.001">
+                </div>
+                <div class="field">
+                    <label for="max-iterations">Iteraciones máximas</label>
+                    <input type="text" id="max-iterations" placeholder="Ejemplo: 100">
+                </div>
+            </div>
+
+            <button class="btn" id="calcular-falsa-posicion" type="button">Calcular raíz</button>
+        </section>
+
+        <section class="panel" aria-labelledby="table-title">
+            <h2 id="table-title">Iteraciones</h2>
+            <div class="table-wrap">
+                <table id="result-table">
+                    <thead>
+                        <tr>
+                            <th>Iteración</th>
+                            <th>a</th>
+                            <th>b</th>
+                            <th>c</th>
+                            <th>f(c)</th>
+                            <th>Error absoluto</th>
+                            <th>Error aproximado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-table-body">
+                        <!-- Los resultados se agregan aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="result-panel" aria-live="polite">
+            <h2>Resultado</h2>
+            <p id="result"></p>
+            <p id="error-message" class="error-text"></p>
         </section>
     </div>
 
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/falsa-posicion.js"></script>
 </body>
 </html>

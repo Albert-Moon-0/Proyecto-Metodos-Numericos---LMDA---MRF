@@ -25,6 +25,6 @@ MODULOS = [
     'biseccion',
     'secante',
     # Métodos futuros, agrega el archivo correspondiente y descomenta:
-    # 'falsa_posicion',
-    # 'newton_raphson',
+    'falsa_posicion',
+    'newton-raphson',
 ]
