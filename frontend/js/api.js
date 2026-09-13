@@ -7,7 +7,11 @@
 // Si en cambio abres el proyecto a través del propio backend
 // (http://localhost:5000), esta misma URL sigue funcionando porque
 // apunta al mismo servidor.
-const API_BASE_URL = 'http://localhost:5000';
+// Si abren la web desde ngrok, usa la URL de ngrok automáticamente. 
+// Si la abren en local (Live Server), usa localhost:5000
+const API_BASE_URL = window.location.hostname.includes('ngrok') 
+    ? window.location.origin 
+    : 'http://localhost:5000';
 
 /**
  * Hace un POST en formato JSON hacia el backend y devuelve la respuesta

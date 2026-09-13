@@ -91,8 +91,12 @@ def _validar_nodo(nodo):
         _validar_nodo(hijo)
 
 
-def crear_funcion(expresion_original):
-    """Convierte el texto de f(x) en una función Python evaluable de forma segura."""
+def _preparar_arbol(expresion_original):
+    """Convierte el texto de f(x) en un nodo AST validado (sin compilar).
+
+    Reutilizado por `crear_funcion` y por `comun.derivador` (para derivar
+    simbólicamente antes de compilar).
+    """
 
     expresion = str(expresion_original if expresion_original is not None else '').strip()
 
@@ -117,7 +121,16 @@ def crear_funcion(expresion_original):
             'Usa "x", funciones (sin, cos, tan, exp, log, ln, sqrt, ...) y las constantes e, pi.'
         )
 
-    codigo = compile(arbol, '<f(x)>', 'eval')
+    return arbol.body
+
+
+def _compilar_desde_nodo(nodo_expresion):
+    """Compila un nodo AST (ya validado) en una función Python evaluable de forma segura."""
+
+    envoltura = ast.Expression(body=nodo_expresion)
+    ast.fix_missing_locations(envoltura)
+
+    codigo = compile(envoltura, '<f(x)>', 'eval')
     entorno_base = dict(FUNCIONES_PERMITIDAS)
     entorno_base.update(CONSTANTES_PERMITIDAS)
 
@@ -144,3 +157,10 @@ def crear_funcion(expresion_original):
         return float(resultado)
 
     return f
+
+
+def crear_funcion(expresion_original):
+    """Convierte el texto de f(x) en una función Python evaluable de forma segura."""
+
+    nodo = _preparar_arbol(expresion_original)
+    return _compilar_desde_nodo(nodo)

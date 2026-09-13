@@ -506,3 +506,109 @@ select:focus-visible {
     color: var(--text-primary);
     font-size: 0.875em;
 }
+
+/* ---------- Gráfica de análisis (Punto Fijo) ---------- */
+
+.graph-frame {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.graph-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    margin-top: 0.9rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.graph-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.graph-legend__swatch {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 2px;
+    display: inline-block;
+    flex: 0 0 auto;
+}
+
+/* ---------- Criterios de existencia / unicidad ---------- */
+
+.analysis-summary {
+    margin-top: 1.1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.analysis-summary--ok {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid rgba(79, 209, 197, 0.3);
+}
+
+.analysis-summary--fail {
+    background: var(--error-soft);
+    color: var(--error);
+    border: 1px solid rgba(242, 100, 90, 0.3);
+}
+
+.criteria-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.criteria-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.criteria-item__icon {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    margin-top: 0.1rem;
+}
+
+.criteria-item--ok .criteria-item__icon {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.criteria-item--fail .criteria-item__icon {
+    background: var(--error-soft);
+    color: var(--error);
+}
+
+.criteria-item__text {
+    color: var(--text-secondary);
+}
+
+.criteria-item__text strong {
+    color: var(--text-primary);
+}

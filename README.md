@@ -12,23 +12,32 @@ proyecto-metodos-numericos/
 │   └── metodos/
 │       ├── __init__.py            # Registro central de métodos (ver abajo)
 │       ├── comun/
-│       │   └── parser_funciones.py  # Parser seguro de f(x): trig, e^x, log, algebraicas...
+│       │   ├── parser_funciones.py  # Parser seguro de f(x): trig, e^x, log, algebraicas...
+│       │   └── derivador.py         # Derivada simbólica exacta (usada por Newton-Raphson y Punto Fijo)
 │       ├── punto_flotante.py      # Conversión IEEE 754 (antes "Punto Fijo")
 │       ├── biseccion.py           # Método de Bisección
-│       └── secante.py             # Método de la Secante
+│       ├── secante.py             # Método de la Secante
+│       ├── falsa_posicion.py      # Método de la Falsa Posición
+│       ├── newton_raphson.py      # Método de Newton-Raphson
+│       └── punto_fijo.py          # Método de Punto Fijo (con análisis de existencia/unicidad)
 └── frontend/
     ├── index.html
     ├── PuntoFlotante.html
     ├── Biseccion.html
     ├── Secante.html
-    ├── FalsaPosicion.html         # Próximamente
-    ├── NewtonRaphson.html         # Próximamente
+    ├── FalsaPosicion.html
+    ├── NewtonRaphson.html
+    ├── PuntoFijo.html
     ├── styles.css
     └── js/
-        ├── api.js                 # Helper de conexión con el backend
+        ├── api.js                   # Helper de conexión con el backend
+        ├── tablas-y-recursos.js     # Utilidades compartidas de tabla/resultado
         ├── puntoFlotante.js
         ├── biseccion.js
-        └── secante.js
+        ├── secante.js
+        ├── falsa-posicion.js
+        ├── newton-raphson.js
+        └── punto-fijo.js
 ```
 
 ## Cómo ejecutarlo
@@ -42,45 +51,40 @@ python app.py
 Abre **http://localhost:5000** en el navegador. El propio backend sirve el
 frontend, así que no necesitas nada más.
 
-(Si prefieres abrir los archivos HTML directamente con doble clic, también
-funciona: solo asegúrate de que `python app.py` siga corriendo, ya que
-`frontend/js/api.js` llama a `http://localhost:5000` por defecto.)
+## Métodos incluidos
 
-## Qué cambió respecto a la versión anterior
+- **Punto Flotante (IEEE 754)** — conversión decimal ↔ binario en 16/32/64 bits.
+- **Bisección** — con error absoluto y error aproximado.
+- **Secante**
+- **Falsa Posición**
+- **Newton-Raphson** — la derivada f'(x) se calcula de forma **simbólica y
+  exacta** (no numérica) a partir del texto de f(x), con `comun/derivador.py`.
+- **Punto Fijo** — itera p_{n+1} = g(p_n) y además, sobre un intervalo [a, b]
+  que ingresa el usuario, evalúa los dos criterios del teorema de existencia
+  y unicidad:
+  1. **Mapeo**: g(x) ∈ [a, b] para todo x ∈ [a, b].
+  2. **Contracción**: |g'(x)| ≤ k < 1 para todo x ∈ [a, b].
 
-- **Backend movido de JavaScript a Python** (Flask), con la interfaz en
-  HTML/CSS/JavaScript consumiendo esa API por medio de `fetch`.
-- **Cada método vive en su propio archivo** (`punto_flotante.py`,
-  `biseccion.py`, `secante.py`). `app.py` los registra de forma aislada:
-  si un archivo tiene un error, los demás métodos siguen funcionando.
-- **Las funciones f(x) ahora aceptan cualquier tipo de expresión**:
-  algebraicas (`x**2 - 3`), trigonométricas (`sin(x)`, `cos(x)`, `tan(x)`,
-  ...), hiperbólicas (`sinh`, `cosh`, `tanh`), exponenciales con `e`
-  (`exp(x)`, `e**x`), logarítmicas (`log`, `ln`, `log10`, `log2`), raíz
-  cuadrada (`sqrt`), valor absoluto (`abs`), etc. Esto se validó y evalúa
-  de forma segura en el backend (no se usa `eval` sin restricciones).
-- **"Punto Fijo" se renombró a "Punto Flotante"**: lo que hacía ese método
-  siempre fue una conversión decimal ↔ binario en punto flotante (signo,
-  característica/exponente y mantisa), no el método iterativo de punto
-  fijo, así que el nombre ahora es el correcto.
-- **El selector de bits ahora solo permite 16, 32 o 64**, usando el
-  estándar **IEEE 754** real (media precisión, precisión simple y
-  precisión doble) a través del módulo `struct` de Python, que garantiza
-  una representación 100% conforme al estándar.
-- **Bisección ahora muestra dos columnas de error**: el error absoluto
-  (mitad del ancho del intervalo, como antes) y el error aproximado
-  (variación porcentual entre la aproximación actual y la anterior).
-- **Estructura lista para más métodos**: para agregar uno nuevo (por
-  ejemplo Falsa Posición o Newton-Raphson) solo hace falta crear su
-  archivo en `backend/metodos/`, agregarlo a la lista `MODULOS` en
-  `backend/metodos/__init__.py`, y crear su página + script en
-  `frontend/`. Ya se dejaron las páginas de Falsa Posición y
-  Newton-Raphson como "Próximamente" con esa guía incluida.
+  Debajo de la tabla se dibuja una gráfica con g(x), |g'(x)| y la recta
+  identidad y = x, junto con un recuadro punteado que marca el intervalo
+  [a, b] × [a, b] (igual que en el análisis gráfico clásico de punto fijo).
 
-## Ejemplos de funciones f(x) admitidas
+## Estructura lista para más métodos
+
+Para agregar un método nuevo: crea su archivo en `backend/metodos/` con un
+`Blueprint` de Flask, agrégalo a la lista `MODULOS` en
+`backend/metodos/__init__.py`, y crea su página + script en `frontend/`.
+Cada método está aislado en su propio archivo: un error en uno no afecta
+a los demás.
+
+## Ejemplos de funciones admitidas
 
 - `x**2 - 3` o `x^2 - 3`
 - `sin(x) + cos(x) - 1`
 - `exp(x) - 5` o `e**x - 5`
 - `log(x) - 1` (logaritmo natural), `ln(x) - 1`, `log10(x)`, `log2(x)`
 - `sqrt(x) - 2`
+
+(Newton-Raphson y Punto Fijo requieren además que la función tenga
+derivada simbólica soportada: algebraica, trigonométrica, hiperbólica,
+exponencial o logarítmica — no admiten `abs`, `floor` ni `ceil`.)

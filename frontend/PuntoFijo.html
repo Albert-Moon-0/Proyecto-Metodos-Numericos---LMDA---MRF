@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Método de Newton-Raphson — Métodos Numéricos</title>
+    <title>Método de Punto Fijo — Métodos Numéricos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,11 +23,10 @@
 
         <header class="page-header">
             <p class="page-header__kicker">Método iterativo</p>
-            <h1>Método de Newton-Raphson</h1>
+            <h1>Método de Punto Fijo</h1>
             <p class="page-header__intro">
-                Usa la recta tangente a f(x) en cada aproximación p<sub>n</sub> para generar
-                la siguiente: p<sub>n+1</sub> = p<sub>n</sub> − f(p<sub>n</sub>) / f'(p<sub>n</sub>).
-                La derivada se calcula automáticamente a partir de f(x).
+                Encuentra un valor p tal que g(p) = p, iterando p<sub>n+1</sub> = g(p<sub>n</sub>).
+                Convierte primero tu ecuación f(x) = 0 a la forma x = g(x) y escribe aquí g(x).
             </p>
         </header>
 
@@ -35,8 +34,8 @@
             <h2 id="config-title">Configuración</h2>
 
             <div class="field">
-                <label for="function-input">Función f(x)</label>
-                <input type="text" id="function-input" placeholder="Ejemplo: cos(x) - x, x**3 + x - 1, exp(x) - 5">
+                <label for="function-input">Función g(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: cos(x), 8/(3*x), sqrt(x+2)">
             </div>
 
             <div class="field-row">
@@ -54,7 +53,18 @@
                 </div>
             </div>
 
-            <button class="btn" id="calcular-newton" type="button">Calcular raíz</button>
+            <div class="field-row">
+                <div class="field">
+                    <label for="point-a">Intervalo — a</label>
+                    <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                </div>
+                <div class="field">
+                    <label for="point-b">Intervalo — b</label>
+                    <input type="text" id="point-b" placeholder="Ejemplo: 1">
+                </div>
+            </div>
+
+            <button class="btn" id="calcular-punto-fijo" type="button">Calcular</button>
         </section>
 
         <section class="panel" aria-labelledby="table-title">
@@ -65,8 +75,7 @@
                         <tr>
                             <th>Iteración</th>
                             <th>p<sub>n</sub></th>
-                            <th>f(p<sub>n</sub>)</th>
-                            <th>f'(p<sub>n</sub>)</th>
+                            <th>g(p<sub>n</sub>)</th>
                             <th>p<sub>n+1</sub></th>
                             <th>Error absoluto</th>
                             <th>Error aproximado (%)</th>
@@ -79,6 +88,32 @@
             </div>
         </section>
 
+        <section class="panel" aria-labelledby="criteria-title">
+            <h2 id="criteria-title">Existencia y unicidad del punto fijo en [a, b]</h2>
+            <p class="page-header__intro" style="margin:0 0 0.25rem;">
+                Se evalúa si g(x) ∈ [a, b] para todo x en el intervalo (existencia) y si
+                |g'(x)| ≤ k &lt; 1 en el intervalo (unicidad y convergencia garantizada).
+            </p>
+            <div class="criteria-list" id="criteria-list">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <div id="analysis-summary"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="graph-title">
+            <h2 id="graph-title">Gráfica: g(x), |g'(x)| y y = x</h2>
+            <div class="graph-frame">
+                <svg id="graph-svg" class="graph-svg" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <div class="graph-legend">
+                <span class="graph-legend__item"><span class="graph-legend__swatch" style="background:#4fd1c5;"></span> g(x)</span>
+                <span class="graph-legend__item"><span class="graph-legend__swatch" style="background:#b892f0;"></span> |g'(x)|</span>
+                <span class="graph-legend__item"><span class="graph-legend__swatch" style="background:#8b96a8;"></span> y = x</span>
+                <span class="graph-legend__item"><span class="graph-legend__swatch" style="background:#f2a4a0;"></span> umbral |g'(x)| = 1</span>
+                <span class="graph-legend__item"><span class="graph-legend__swatch" style="background:transparent;border:1px dashed #e6e9ef;"></span> intervalo [a, b]</span>
+            </div>
+        </section>
+
         <section class="result-panel" aria-live="polite">
             <h2>Resultado</h2>
             <p id="result"></p>
@@ -88,6 +123,6 @@
 
     <script src="js/api.js"></script>
     <script src="js/tablas-y-recursos.js"></script>
-    <script src="js/newton-raphson.js"></script>
+    <script src="js/punto-fijo.js"></script>
 </body>
 </html>

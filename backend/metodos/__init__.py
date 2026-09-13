@@ -24,7 +24,7 @@ MODULOS = [
     'punto_flotante',
     'biseccion',
     'secante',
-    # Métodos futuros, agrega el archivo correspondiente y descomenta:
     'falsa_posicion',
-    'newton-raphson',
+    'newton_raphson',
+    'punto_fijo',
 ]
