@@ -27,4 +27,7 @@ MODULOS = [
     'falsa_posicion',
     'newton_raphson',
     'punto_fijo',
+    'steffenson',
+    'muller',
+    'deflacion',
 ]

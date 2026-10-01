@@ -74,6 +74,43 @@
             maxIteraciones: document.getElementById('max-iterations')?.value ?? '',
         };
     }
+    
+    // Campos comunes a los métodos que piden g(x) + un único punto
+    // inicial x0 (Punto Fijo, Steffensen).
+    function leerDatosFuncionPuntoInicial() {
+        return {
+            funcion: document.getElementById('function-input')?.value ?? '',
+            x0: document.getElementById('point-x0')?.value ?? '',
+            tolerancia: document.getElementById('tolerance')?.value ?? '',
+            maxIteraciones: document.getElementById('max-iterations')?.value ?? '',
+        };
+    }
+
+     // Campos comunes a los métodos que piden f(x) + tres aproximaciones
+    // iniciales p0, p1, p2 (Müller).
+    function leerDatosFuncionTresPuntos() {
+        return {
+            funcion: document.getElementById('function-input')?.value ?? '',
+            p0: document.getElementById('point-p0')?.value ?? '',
+            p1: document.getElementById('point-p1')?.value ?? '',
+            p2: document.getElementById('point-p2')?.value ?? '',
+            tolerancia: document.getElementById('tolerance')?.value ?? '',
+            maxIteraciones: document.getElementById('max-iterations')?.value ?? '',
+        };
+    }
+
+    // Campos para métodos que piden un polinomio (coeficientes) + tres
+    // aproximaciones iniciales p0, p1, p2 (Deflación).
+    function leerDatosPolinomioTresPuntos() {
+        return {
+            coeficientes: document.getElementById('coefficients-input')?.value ?? '',
+            p0: document.getElementById('point-p0')?.value ?? '',
+            p1: document.getElementById('point-p1')?.value ?? '',
+            p2: document.getElementById('point-p2')?.value ?? '',
+            tolerancia: document.getElementById('tolerance')?.value ?? '',
+            maxIteraciones: document.getElementById('max-iterations')?.value ?? '',
+        };
+    }
 
     global.TablasYRecursos = {
         formatearNumero,
@@ -81,5 +118,8 @@
         pintarTabla,
         mostrarResultado,
         leerDatosFuncionIntervalo,
+        leerDatosFuncionPuntoInicial,
+        leerDatosFuncionTresPuntos,
+        leerDatosPolinomioTresPuntos,
     };
 })(typeof window !== 'undefined' ? window : globalThis);
