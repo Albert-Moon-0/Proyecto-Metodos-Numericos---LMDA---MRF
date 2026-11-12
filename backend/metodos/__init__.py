@@ -30,4 +30,6 @@ MODULOS = [
     'steffenson',
     'muller',
     'deflacion',
+    'euler',
+    'taylor',
 ]

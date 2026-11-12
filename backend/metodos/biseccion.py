@@ -14,35 +14,13 @@ import math
 
 from flask import Blueprint, jsonify, request
 
-from metodos.comun.parser_funciones import ErrorFuncion, crear_funcion
+from metodos.comun.parser_funciones import ErrorFuncion, crear_funcion, _leer_entero_positivo, _leer_numero
 
 blueprint = Blueprint('biseccion', __name__, url_prefix='/api/biseccion')
 
 
 class ErrorBiseccion(Exception):
     """Se lanza cuando la entrada del usuario o el intervalo no son válidos."""
-
-
-def _leer_numero(valor, nombre_campo):
-    if valor is None or str(valor).strip() == '':
-        raise ErrorBiseccion(f'El campo "{nombre_campo}" debe ser un número válido.')
-    try:
-        numero = float(valor)
-    except (TypeError, ValueError):
-        raise ErrorBiseccion(f'El campo "{nombre_campo}" debe ser un número válido.')
-
-    if not math.isfinite(numero):
-        raise ErrorBiseccion(f'El campo "{nombre_campo}" debe ser un número finito.')
-
-    return numero
-
-
-def _leer_entero_positivo(valor, nombre_campo):
-    numero = _leer_numero(valor, nombre_campo)
-    if not float(numero).is_integer() or numero <= 0:
-        raise ErrorBiseccion(f'El campo "{nombre_campo}" debe ser un entero positivo.')
-    return int(numero)
-
 
 def calcular_biseccion(f, a, b, tolerancia, max_iteraciones):
     if f(a) * f(b) >= 0:
@@ -89,10 +67,10 @@ def calcular():
     try:
         datos = request.get_json(force=True, silent=True) or {}
 
-        a = _leer_numero(datos.get('a'), 'Punto a')
-        b = _leer_numero(datos.get('b'), 'Punto b')
-        tolerancia = _leer_numero(datos.get('tolerancia'), 'Error máximo')
-        max_iteraciones = _leer_entero_positivo(datos.get('maxIteraciones'), 'Iteraciones máximas')
+        a = _leer_numero(datos.get('a'), 'Punto a', ErrorBiseccion)
+        b = _leer_numero(datos.get('b'), 'Punto b', ErrorBiseccion)
+        tolerancia = _leer_numero(datos.get('tolerancia'), 'Error máximo', ErrorBiseccion)
+        max_iteraciones = _leer_entero_positivo(datos.get('maxIteraciones'), 'Iteraciones máximas', ErrorBiseccion)
 
         if a == b:
             raise ErrorBiseccion('Los puntos "a" y "b" deben ser distintos.')

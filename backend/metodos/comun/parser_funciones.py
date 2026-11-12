@@ -1,10 +1,15 @@
 """
-Parser seguro de funciones matemáticas f(x).
+Parser seguro de funciones matemáticas f(x) y f(t, y).
 
 Este módulo es utilizado por todos los métodos que necesitan evaluar una
 función ingresada por el usuario como texto (Bisección, Secante y
 cualquier método futuro). No es un "método numérico" en sí mismo, por eso
 vive en `comun/` y no junto a los archivos de cada método.
+
+Hay dos puntos de entrada, que comparten validación, funciones permitidas
+y evaluación:
+- `crear_funcion(texto)`      -> f(x)       (raíces, integración, ...)
+- `crear_funcion_edo(texto)`  -> f(t, y)    (ecuaciones diferenciales: Euler, ...)
 
 Soporta:
 - Operaciones algebraicas: + - * / ** (también se acepta "^" como potencia)
@@ -16,9 +21,12 @@ Soporta:
 
 Ejemplos válidos de f(x): "x**2 - 3", "x^2 - 3", "sin(x) + cos(x)",
 "exp(x) - 5", "e**x - 5", "log(x) + 1", "sqrt(x) - 2".
+Ejemplos válidos de f(t, y): "y - t**2 + 1", "t*exp(3*t) - 2*y",
+"sin(t) + cos(y)".
 """
 
 import ast
+import copy
 import math
 
 FUNCIONES_PERMITIDAS = {
@@ -68,9 +76,27 @@ _NODOS_PERMITIDOS = (
     ast.UAdd,
 )
 
+LONGITUD_MAXIMA = 300
+
 
 class ErrorFuncion(Exception):
-    """Se lanza cuando la función f(x) ingresada por el usuario no es válida."""
+    """Se lanza cuando la función ingresada por el usuario no es válida."""
+
+
+class _EnterosAFloat(ast.NodeTransformer):
+    """Convierte las constantes enteras en float.
+
+    Sin esto, algo como 9**9**9**9 se evalúa con enteros de Python (de
+    precisión ilimitada) y deja el servidor calculando "para siempre".
+    Con floats, esa misma expresión falla al instante con OverflowError.
+    Se aplica solo al compilar (sobre una copia), nunca al árbol que
+    devuelve `_preparar_arbol`, para no alterar la derivación simbólica.
+    """
+
+    def visit_Constant(self, nodo):
+        if isinstance(nodo.value, int) and not isinstance(nodo.value, bool):
+            return ast.copy_location(ast.Constant(float(nodo.value)), nodo)
+        return nodo
 
 
 def _validar_nodo(nodo):
@@ -91,17 +117,23 @@ def _validar_nodo(nodo):
         _validar_nodo(hijo)
 
 
-def _preparar_arbol(expresion_original):
-    """Convierte el texto de f(x) en un nodo AST validado (sin compilar).
+def _preparar_arbol(expresion_original, variables=('x',), nombre_funcion='f(x)'):
+    """Convierte el texto de la función en un nodo AST validado (sin compilar).
 
-    Reutilizado por `crear_funcion` y por `comun.derivador` (para derivar
-    simbólicamente antes de compilar).
+    Reutilizado por `crear_funcion`, `crear_funcion_edo` y por
+    `comun.derivador` (para derivar simbólicamente antes de compilar).
+
+    `variables` son los nombres de variable permitidos además de las
+    funciones y constantes: ('x',) para f(x), ('t', 'y') para f(t, y).
     """
 
     expresion = str(expresion_original if expresion_original is not None else '').strip()
 
     if not expresion:
-        raise ErrorFuncion('Ingresa una función f(x).')
+        raise ErrorFuncion(f'Ingresa una función {nombre_funcion}.')
+
+    if len(expresion) > LONGITUD_MAXIMA:
+        raise ErrorFuncion(f'La función es demasiado larga (máximo {LONGITUD_MAXIMA} caracteres).')
 
     expresion_python = expresion.replace('^', '**')
 
@@ -112,49 +144,81 @@ def _preparar_arbol(expresion_original):
 
     _validar_nodo(arbol)
 
+    nombres_validos = set(variables) | set(FUNCIONES_PERMITIDAS) | set(CONSTANTES_PERMITIDAS)
     identificadores = {nodo.id for nodo in ast.walk(arbol) if isinstance(nodo, ast.Name)}
-    no_permitidos = identificadores - NOMBRES_PERMITIDOS
+    no_permitidos = identificadores - nombres_validos
     if no_permitidos:
         nombre = sorted(no_permitidos)[0]
+        variables_texto = ' y '.join(f'"{variable}"' for variable in variables)
         raise ErrorFuncion(
-            f'"{nombre}" no es un nombre válido en f(x). '
-            'Usa "x", funciones (sin, cos, tan, exp, log, ln, sqrt, ...) y las constantes e, pi.'
+            f'"{nombre}" no es un nombre válido en {nombre_funcion}. '
+            f'Usa {variables_texto}, funciones (sin, cos, tan, exp, log, ln, sqrt, ...) y las constantes e, pi.'
         )
 
     return arbol.body
 
 
-def _compilar_desde_nodo(nodo_expresion):
-    """Compila un nodo AST (ya validado) en una función Python evaluable de forma segura."""
+def _compilar_codigo(nodo_expresion):
+    """Compila un nodo AST (ya validado) a código evaluable.
 
-    envoltura = ast.Expression(body=nodo_expresion)
+    Trabaja sobre una copia: el nodo original queda intacto, así que quien
+    lo reutilice (p. ej. el derivador) sigue viendo los enteros originales.
+    """
+
+    copia = _EnterosAFloat().visit(copy.deepcopy(nodo_expresion))
+    envoltura = ast.Expression(body=copia)
     ast.fix_missing_locations(envoltura)
 
-    codigo = compile(envoltura, '<f(x)>', 'eval')
-    entorno_base = dict(FUNCIONES_PERMITIDAS)
-    entorno_base.update(CONSTANTES_PERMITIDAS)
+    return compile(envoltura, '<funcion>', 'eval')
+
+
+def _entorno_base():
+    entorno = dict(FUNCIONES_PERMITIDAS)
+    entorno.update(CONSTANTES_PERMITIDAS)
+    return entorno
+
+
+def _evaluar(codigo, entorno, llamada, punto):
+    """Evalúa el código con un entorno restringido y valida que el resultado
+    sea un número real finito.
+
+    `llamada` es cómo se muestra la evaluación en los mensajes (p. ej. "f(2)"
+    o "f(0.5, 1)") y `punto` es el valor de las variables ("x = 2" o
+    "t = 0.5, y = 1").
+    """
+
+    try:
+        resultado = eval(codigo, {'__builtins__': {}}, entorno)  # noqa: S307 - entorno restringido
+    except ZeroDivisionError as error:
+        raise ErrorFuncion(f'División entre cero al evaluar {llamada}.') from error
+    except OverflowError as error:
+        raise ErrorFuncion(f'{llamada} produjo un número demasiado grande.') from error
+    except ValueError as error:
+        raise ErrorFuncion(f'No se pudo evaluar {llamada}: fuera del dominio de la función.') from error
+    except ErrorFuncion:
+        raise
+    except Exception as error:
+        raise ErrorFuncion(f'No se pudo evaluar la función en {punto}.') from error
+
+    if isinstance(resultado, bool) or not isinstance(resultado, (int, float)):
+        raise ErrorFuncion(f'{llamada} no produjo un número válido. Revisa la función.')
+
+    if not math.isfinite(resultado):
+        raise ErrorFuncion(f'{llamada} no produjo un número finito. Revisa la función.')
+
+    return float(resultado)
+
+
+def _compilar_desde_nodo(nodo_expresion):
+    """Compila un nodo AST (ya validado) en una función Python f(x) evaluable de forma segura."""
+
+    codigo = _compilar_codigo(nodo_expresion)
+    entorno_base = _entorno_base()
 
     def f(valor):
         entorno = dict(entorno_base)
         entorno['x'] = valor
-        try:
-            resultado = eval(codigo, {'__builtins__': {}}, entorno)  # noqa: S307 - entorno restringido
-        except ZeroDivisionError as error:
-            raise ErrorFuncion(f'División entre cero al evaluar f({valor}).') from error
-        except ValueError as error:
-            raise ErrorFuncion(f'No se pudo evaluar f({valor}): fuera del dominio de la función.') from error
-        except ErrorFuncion:
-            raise
-        except Exception as error:
-            raise ErrorFuncion(f'No se pudo evaluar la función en x = {valor}.') from error
-
-        if isinstance(resultado, bool) or not isinstance(resultado, (int, float)):
-            raise ErrorFuncion(f'f({valor}) no produjo un número válido. Revisa la función.')
-
-        if not math.isfinite(resultado):
-            raise ErrorFuncion(f'f({valor}) no produjo un número finito. Revisa la función.')
-
-        return float(resultado)
+        return _evaluar(codigo, entorno, f'f({valor})', f'x = {valor}')
 
     return f
 
@@ -164,3 +228,40 @@ def crear_funcion(expresion_original):
 
     nodo = _preparar_arbol(expresion_original)
     return _compilar_desde_nodo(nodo)
+
+
+def crear_funcion_edo(expresion_original):
+    """Convierte el texto de f(t, y) en una función Python f(t, y) -> float,
+    para ecuaciones diferenciales dy/dt = f(t, y)."""
+
+    nodo = _preparar_arbol(expresion_original, variables=('t', 'y'), nombre_funcion='f(t, y)')
+    codigo = _compilar_codigo(nodo)
+    entorno_base = _entorno_base()
+
+    def f(t, y):
+        entorno = dict(entorno_base)
+        entorno['t'] = t
+        entorno['y'] = y
+        return _evaluar(codigo, entorno, f'f({t:g}, {y:g})', f't = {t:g}, y = {y:g}')
+
+    return f
+
+def _leer_numero(valor, nombre_campo, Error):
+    if valor is None or str(valor).strip() == '':
+        raise Error(f'El campo "{nombre_campo}" debe ser un número válido.')
+    try:
+        numero = float(valor)
+    except (TypeError, ValueError):
+        raise Error(f'El campo "{nombre_campo}" debe ser un número válido.')
+
+    if not math.isfinite(numero):
+        raise Error(f'El campo "{nombre_campo}" debe ser un número finito.')
+
+    return numero
+
+
+def _leer_entero_positivo(valor, nombre_campo, Error):
+    numero = _leer_numero(valor, nombre_campo, Error)
+    if not float(numero).is_integer() or numero <= 0:
+        raise Error(f'El campo "{nombre_campo}" debe ser un entero positivo.')
+    return int(numero)

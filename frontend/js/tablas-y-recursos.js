@@ -112,6 +112,28 @@
         };
     }
 
+    // (Metodo Euler EDO, Metodo Taylor EDO). Si un método futuro usa otros campos
+    function leerDatosEDO() {
+    return {
+        funcion: document.getElementById('function-input')?.value ?? '',
+        t0: document.getElementById('point-t0')?.value ?? '',
+        tn: document.getElementById('point-tn')?.value ?? '',
+        n: document.getElementById('no-subintervalos')?.value ?? '',
+        w0: document.getElementById('w0')?.value ?? '',
+    };
+}
+    // (Metodo Euler EDO, Metodo Taylor EDO). Si un método futuro usa otros campos
+    function leerDatosEDO_Taylor() {
+    return {
+        funcion: document.getElementById('function-input')?.value ?? '',
+        t0: document.getElementById('point-t0')?.value ?? '',
+        tn: document.getElementById('point-tn')?.value ?? '',
+        n: document.getElementById('no-subintervalos')?.value ?? '',
+        w0: document.getElementById('w0')?.value ?? '',
+        orden: document.getElementById('orden-taylor')?.value ?? '',
+    };
+}
+
     global.TablasYRecursos = {
         formatearNumero,
         limpiarTabla,
@@ -121,5 +143,7 @@
         leerDatosFuncionPuntoInicial,
         leerDatosFuncionTresPuntos,
         leerDatosPolinomioTresPuntos,
+        leerDatosEDO,
+        leerDatosEDO_Taylor,
     };
 })(typeof window !== 'undefined' ? window : globalThis);

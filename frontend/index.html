@@ -19,7 +19,8 @@
             <h1>Métodos Numéricos</h1>
             <p class="hero__intro">
                 Implementación y análisis de algoritmos para resolver problemas
-                matemáticos complejos
+                matemáticos complejos: ecuaciones, interpolación, integración
+                y otros métodos utilizados en cómputo numérico.
             </p>
         </div>
         <svg class="hero__curve" viewBox="0 0 240 160" aria-hidden="true">
@@ -35,82 +36,314 @@
     </header>
 
     <main>
-        <section class="section" aria-labelledby="contenido-titulo">
-            <h2 id="contenido-titulo">Contenido del proyecto</h2>
-            <nav class="method-list" aria-label="Métodos implementados">
-                <a class="method-card" href="PuntoFlotante.html">
+        <section class="section" aria-labelledby="modulos-titulo">
+            <h2 id="modulos-titulo">Módulos</h2>
+
+            <!--
+                ================================================================
+                CÓMO EDITAR ESTE ÍNDICE
+                ----------------------------------------------------------------
+                Cada módulo es un bloque <article class="module">. Para agregar
+                un método a un módulo, copia este bloque dentro de su
+                <div class="module__content"> y cambia href, título, descripción
+                y la etiqueta (tag):
+
+                <a class="method-card" href="MiMetodo.html">
                     <div class="method-card__body">
-                        <h3>Punto Flotante (IEEE 754)</h3>
-                        <p>Conversión entre representación decimal y binaria en punto flotante, en 16, 32 o 64 bits.</p>
+                        <h3>Nombre del método</h3>
+                        <p>Descripción corta de una línea.</p>
                     </div>
-                    <span class="method-card__tag">IEEE 754</span>
+                    <span class="method-card__tag">etiqueta</span>
                 </a>
 
-                <a class="method-card" href="Biseccion.html">
-                    <div class="method-card__body">
-                        <h3>Método de Bisección</h3>
-                        <p>Búsqueda de raíces por bisección sucesiva de un intervalo cerrado.</p>
-                    </div>
-                    <span class="method-card__tag">[a, b]</span>
-                </a>
+                - Cuando un módulo tiene al menos un método, el aviso
+                  "Próximamente" desaparece solo y el contador se actualiza.
+                - Borra el <p class="module-empty"> del módulo cuando ya
+                  tenga métodos.
+                - Para un módulo nuevo, copia un <article class="module">
+                  completo y cambia el id (único), el número y el título.
+                ================================================================
+            -->
 
-                <a class="method-card" href="Secante.html">
-                    <div class="method-card__body">
-                        <h3>Método de la Secante</h3>
-                        <p>Iteración de aproximaciones lineales para encontrar raíces de funciones.</p>
-                    </div>
-                    <span class="method-card__tag">f(x) = 0</span>
-                </a>
+            <div class="modules" id="modules">
 
-                <a class="method-card" href="FalsaPosicion.html">
-                    <div class="method-card__body">
-                        <h3>Método de la Falsa Posición</h3>
-                        <p>Mejora de la bisección usando una aproximación lineal para encontrar raíces.</p>
+                <!-- 01 · Punto flotante -->
+                <article class="module" id="punto-flotante">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-punto-flotante">
+                            <span class="module__index">01</span>
+                            <span class="module__title">Punto flotante</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-punto-flotante" role="region" aria-labelledby="punto-flotante">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <a class="method-card" href="PuntoFlotante.html">
+                                    <div class="method-card__body">
+                                        <h3>Conversión decimal ↔ binario</h3>
+                                        <p>Representación de punto flotante con signo, característica y mantisa configurables.</p>
+                                    </div>
+                                    <span class="method-card__tag">s | c | m</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">[a, b]</span>
-                </a>
+                </article>
 
-                <a class="method-card" href="NewtonRaphson.html">
-                    <div class="method-card__body">
-                        <h3>Método de Newton-Raphson</h3>
-                        <p>Convergencia cuadrática usando la derivada de la función objetivo.</p>
+                <!-- 02 · Raíces de ecuaciones -->
+                <article class="module" id="raices">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-raices">
+                            <span class="module__index">02</span>
+                            <span class="module__title">Raíces de ecuaciones</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-raices" role="region" aria-labelledby="raices">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <a class="method-card" href="Biseccion.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Bisección</h3>
+                                        <p>Búsqueda de raíces por bisección sucesiva de un intervalo cerrado.</p>
+                                    </div>
+                                    <span class="method-card__tag">[a, b]</span>
+                                </a>
+
+                                <a class="method-card" href="FalsaPosicion.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de la Falsa Posición</h3>
+                                        <p>Combina bisección y secante, conservando siempre un intervalo con cambio de signo.</p>
+                                    </div>
+                                    <span class="method-card__tag">f(a)·f(b) &lt; 0</span>
+                                </a>
+
+                                <a class="method-card" href="Secante.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de la Secante</h3>
+                                        <p>Aproxima la raíz con la recta que pasa por dos aproximaciones iniciales.</p>
+                                    </div>
+                                    <span class="method-card__tag">p₀, p₁</span>
+                                </a>
+
+                                <a class="method-card" href="NewtonRaphson.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Newton-Raphson</h3>
+                                        <p>Convergencia cuadrática usando la derivada de la función objetivo.</p>
+                                    </div>
+                                    <span class="method-card__tag">f'(x)</span>
+                                </a>
+
+                                <a class="method-card" href="PuntoFijo.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Punto Fijo</h3>
+                                        <p>Itera hasta encontrar un punto donde la función se anula.</p>
+                                    </div>
+                                    <span class="method-card__tag">g(x)</span>
+                                </a>
+
+                                <a class="method-card" href="Steffensen.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Steffensen</h3>
+                                        <p>Acelera el punto fijo con la extrapolación Δ² de Aitken.</p>
+                                    </div>
+                                    <span class="method-card__tag">Δ² Aitken</span>
+                                </a>
+
+                                <a class="method-card" href="Muller.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Müller</h3>
+                                        <p>Ajusta una parábola a tres puntos; encuentra raíces reales y complejas.</p>
+                                    </div>
+                                    <span class="method-card__tag">ℝ · ℂ</span>
+                                </a>
+
+                                <a class="method-card" href="Deflacion.html">
+                                    <div class="method-card__body">
+                                        <h3>Deflación</h3>
+                                        <p>Obtiene todas las raíces de un polinomio reduciendo su grado raíz por raíz.</p>
+                                    </div>
+                                    <span class="method-card__tag">w(x)</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">f'(x)</span>
-                </a>
+                </article>
 
-                <a class="method-card" href="PuntoFijo.html">
-                    <div class="method-card__body">
-                        <h3>Método de Punto Fijo</h3>
-                        <p>Iteración p = g(p) con análisis gráfico de existencia y unicidad en un intervalo.</p>
+                <!-- 03 · Interpolación -->
+                <article class="module" id="interpolacion">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-interpolacion">
+                            <span class="module__index">03</span>
+                            <span class="module__title">Interpolación</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-interpolacion" role="region" aria-labelledby="interpolacion">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <a class="method-card" href="PolinomioLagrange.html">
+                                    <div class="method-card__body">
+                                        <h3>Polinomio de Lagrange</h3>
+                                        <p>Construye un polinomio que pasa por un conjunto de puntos dados.</p>
+                                    </div>
+                                    <span class="method-card__tag">ℝ</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">x = g(x)</span>
-                </a>
+                </article>
 
-                <a class="method-card" href="Steffenson.html">
-                    <div class="method-card__body">
-                        <h3>Método de Steffensen</h3>
-                        <p>Aceleración de la convergencia del método de Punto Fijo usando extrapolación Δ² de Aitken.</p>
+                <!-- 04 · Extrapolación -->
+                <article class="module" id="extrapolacion">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-extrapolacion">
+                            <span class="module__index">04</span>
+                            <span class="module__title">Extrapolación</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-extrapolacion" role="region" aria-labelledby="extrapolacion">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <p class="module-empty">Aún sin métodos. Agrega aquí tus enlaces (ver instrucciones al inicio de la lista de módulos).</p>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">x = g(x)</span>
-                </a>    
+                </article>
 
-                <a class="method-card" href="Muller.html">
-                    <div class="method-card__body">
-                        <h3>Método de Müller</h3>
-                        <p>Encuentra raíces de funciones usando interpolación cuadrática y permite raíces complejas.</p>
+                <!-- 05 · Splines -->
+                <article class="module" id="splines">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-splines">
+                            <span class="module__index">05</span>
+                            <span class="module__title">Splines</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-splines" role="region" aria-labelledby="splines">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <p class="module-empty">Aún sin métodos. Agrega aquí tus enlaces (ver instrucciones al inicio de la lista de módulos).</p>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">f(x) = 0</span>
-                </a>
+                </article>
 
-                <a class="method-card" href="Deflacion.html">
-                    <div class="method-card__body">
-                        <h3>Deflación de Polinomios</h3>
-                        <p>Reducción de un polinomio al dividirlo por un factor lineal, útil para encontrar raíces múltiples.</p>
+                <!-- 06 · Integración numérica -->
+                <article class="module" id="integracion">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-integracion">
+                            <span class="module__index">06</span>
+                            <span class="module__title">Integración numérica</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-integracion" role="region" aria-labelledby="integracion">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <p class="module-empty">Aún sin métodos. Agrega aquí tus enlaces (ver instrucciones al inicio de la lista de módulos).</p>
+                            </div>
+                        </div>
                     </div>
-                    <span class="method-card__tag">P(x) / (x - r)</span>
-                </a>
+                </article>
 
-            </nav>
+                <!-- 07 · Integración múltiple -->
+                <article class="module" id="integracion-multiple">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-integracion-multiple">
+                            <span class="module__index">07</span>
+                            <span class="module__title">Integración múltiple</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-integracion-multiple" role="region" aria-labelledby="integracion-multiple">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <p class="module-empty">Aún sin métodos. Agrega aquí tus enlaces (ver instrucciones al inicio de la lista de módulos).</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 08 · Derivación numérica -->
+                <article class="module" id="derivacion">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-derivacion">
+                            <span class="module__index">08</span>
+                            <span class="module__title">Derivación numérica</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-derivacion" role="region" aria-labelledby="derivacion">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <p class="module-empty">Aún sin métodos. Agrega aquí tus enlaces (ver instrucciones al inicio de la lista de módulos).</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 09 · Aprox. Ecuac. Dif. Ord. -->
+                <article class="module" id="ecuaciones-diferenciales">
+                    <h3 class="module__heading">
+                        <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-ecuaciones-diferenciales">
+                            <span class="module__index">09</span>
+                            <span class="module__title">Solución Numérica de Ecuaciones Diferenciales Ordinarias</span>
+                            <span class="module__count"></span>
+                            <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h3>
+                    <div class="module__panel" id="panel-ecuaciones-diferenciales" role="region" aria-labelledby="ecuaciones-diferenciales">
+                        <div class="module__inner">
+                            <div class="module__content">
+                                <a class="method-card" href="MétodoEuler.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Euler</h3>
+                                        <p>Aproxima la solución de dy/dt = f(t, y) avanzando en pasos de ancho h.</p>
+                                    </div>
+                                    <span class="method-card__tag">wᵢ₊₁ = wᵢ + h·f</span>
+                                </a>
+                                <a class="method-card" href="MetodoTaylor.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de Taylor</h3>
+                                        <p>Aproxima la solución de dy/dt = f(t, y) usando series de Taylor.</p>
+                                    </div>
+                                    <span class="method-card__tag">wᵢ₊₁ = wᵢ + h·f + (h²/2!)·f' + ...</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
         </section>
     </main>
 
@@ -118,5 +351,6 @@
         <p>Desarrollado por Luna Martínez Diego Alberto y Moran Ramirez Fernando</p>
     </footer>
 
+    <script src="js/index.js"></script>
 </body>
 </html>
