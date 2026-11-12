@@ -30,6 +30,9 @@ MODULOS = [
     'steffenson',
     'muller',
     'deflacion',
+    # Integración numérica
+    'trapecio_simpsons',
+    # Ecuaciones diferenciales
     'euler',
     'taylor',
 ]

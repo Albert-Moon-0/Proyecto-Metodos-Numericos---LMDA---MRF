@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trapecio y Simpson — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page">
+        <a class="back-link" href="index.html#integracion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Integración numérica</p>
+            <h1>Trapecio, Simpson 1/3 y Simpson 3/8</h1>
+            <p class="page-header__intro">
+                Aproxima la integral de f(x) en un intervalo [a, b]. Elige si aplicar la regla
+                una sola vez (simple) o sumarla sobre varios subintervalos (compuesta).
+            </p>
+        </header>
+
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2, sin(x), exp(x)">
+            </div>
+
+            <div class="selector-row">
+                <div class="field">
+                    <span class="field-label" id="label-tipo">Tipo</span>
+                    <div class="segmented" role="group" aria-labelledby="label-tipo">
+                        <button type="button" class="segmented__btn is-active" data-grupo="tipo" data-valor="simple" aria-pressed="true">Simple</button>
+                        <button type="button" class="segmented__btn" data-grupo="tipo" data-valor="compuesto" aria-pressed="false">Compuesto</button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label" id="label-regla">Regla</span>
+                    <div class="segmented" role="group" aria-labelledby="label-regla">
+                        <button type="button" class="segmented__btn is-active" data-grupo="regla" data-valor="trapecio" aria-pressed="true">Trapecio</button>
+                        <button type="button" class="segmented__btn" data-grupo="regla" data-valor="simpson13" aria-pressed="false">Simpson 1/3</button>
+                        <button type="button" class="segmented__btn" data-grupo="regla" data-valor="simpson38" aria-pressed="false">Simpson 3/8</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="formula-hint" id="formula-hint" aria-live="polite"></p>
+
+            <!-- Simple: solo los extremos del intervalo -->
+            <div class="subsection" id="inputs-simple">
+                <div class="field-row">
+                    <div class="field">
+                        <label for="point-x0">Punto inicial x₀</label>
+                        <input type="text" id="point-x0" placeholder="Ejemplo: 0">
+                    </div>
+                    <div class="field">
+                        <label for="point-xn">Punto final xₙ</label>
+                        <input type="text" id="point-xn" placeholder="Ejemplo: 2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compuesto: lista de puntos x (se puede generar o escribir a mano) -->
+            <div class="subsection" id="inputs-compuesto" hidden>
+                <h3 class="subsection__title">Generar puntos equiespaciados</h3>
+                <div class="field-row">
+                    <div class="field">
+                        <label for="gen-x0">Punto inicial x₀</label>
+                        <input type="text" id="gen-x0" placeholder="Ejemplo: 0">
+                    </div>
+                    <div class="field">
+                        <label for="gen-xn">Punto final xₙ</label>
+                        <input type="text" id="gen-xn" placeholder="Ejemplo: 2">
+                    </div>
+                    <div class="field">
+                        <label for="gen-n">Número de subintervalos n</label>
+                        <input type="text" id="gen-n" placeholder="Ejemplo: 10">
+                    </div>
+                </div>
+                <button class="btn btn--ghost" id="generar-puntos" type="button">Generar puntos</button>
+
+                <div class="field-header">
+                    <h3 class="subsection__title" id="titulo-lista-x">Valores de x</h3>
+                    <button class="btn btn--ghost btn--small" id="agregar-punto" type="button">Agregar punto</button>
+                </div>
+                <div class="point-list" id="lista-x" role="group" aria-labelledby="titulo-lista-x"></div>
+            </div>
+
+            <button class="btn" id="calcular-integral" type="button">Calcular solución</button>
+        </section>
+
+        <section class="result-panel" aria-live="polite">
+            <h2>Resultado aproximado de la ∫</h2>
+            <p id="result"></p>
+            <p id="error-message" class="error-text"></p>
+        </section>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/trapecio-simpsons.js"></script>
+</body>
+</html>

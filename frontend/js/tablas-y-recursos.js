@@ -133,6 +133,21 @@
         orden: document.getElementById('orden-taylor')?.value ?? '',
     };
 }
+    function leerDatosTrapecioSimple() {
+    return {
+        funcion: document.getElementById('function-input')?.value ?? '',
+        x0: document.getElementById('point-x0')?.value ?? '',
+        x1: document.getElementById('point-x1')?.value ?? '',
+    };
+}
+    function leerDatosTrapecioCompuesto() {
+    return {
+        funcion: document.getElementById('function-input')?.value ?? '',
+        x0: document.getElementById('point-x0')?.value ?? '',
+        x1: document.getElementById('point-x1')?.value ?? '',
+        n: document.getElementById('no-subintervalos')?.value ?? '',
+    };
+}
 
     global.TablasYRecursos = {
         formatearNumero,
@@ -145,5 +160,7 @@
         leerDatosPolinomioTresPuntos,
         leerDatosEDO,
         leerDatosEDO_Taylor,
+        leerDatosTrapecioSimple,
+        leerDatosTrapecioCompuesto,
     };
 })(typeof window !== 'undefined' ? window : globalThis);
