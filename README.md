@@ -6,38 +6,38 @@ Backend en **Python (Flask)** + Frontend en **HTML/CSS/JavaScript**.
 
 ```
 proyecto-metodos-numericos/
+├── .gitignore
 ├── backend/
 │   ├── app.py                     # Servidor Flask (API + sirve el frontend)
 │   ├── requirements.txt
 │   └── metodos/
-│       ├── __init__.py            # Registro central de métodos (ver abajo)
+│       ├── __init__.py            # Registro central de métodos (lista MODULOS)
 │       ├── comun/
 │       │   ├── parser_funciones.py  # Parser seguro de f(x): trig, e^x, log, algebraicas...
-│       │   └── derivador.py         # Derivada simbólica exacta (usada por Newton-Raphson y Punto Fijo)
-│       ├── punto_flotante.py      # Conversión IEEE 754 (antes "Punto Fijo")
-│       ├── biseccion.py           # Método de Bisección
-│       ├── secante.py             # Método de la Secante
-│       ├── falsa_posicion.py      # Método de la Falsa Posición
-│       ├── newton_raphson.py      # Método de Newton-Raphson
-│       └── punto_fijo.py          # Método de Punto Fijo (con análisis de existencia/unicidad)
+│       │   └── derivador.py         # Derivada simbólica exacta (Newton-Raphson, Punto Fijo, ...)
+│       ├── punto_flotante.py      # Conversión IEEE 754
+│       ├── biseccion.py           # Bisección
+│       ├── secante.py             # Secante
+│       ├── falsa_posicion.py      # Falsa Posición
+│       ├── newton_raphson.py      # Newton-Raphson
+│       ├── punto_fijo.py          # Punto Fijo (con análisis de existencia/unicidad)
+│       ├── steffenson.py          # Steffensen (aceleración de Aitken)
+│       ├── muller.py              # Müller (raíces reales y complejas)
+│       ├── deflacion.py           # Deflación (todas las raíces de un polinomio)
+│       ├── trapecio_simpsons.py   # Trapecio, Simpson 1/3 y 3/8 (simples y compuestas)
+│       ├── euler.py               # Euler para EDO de valor inicial
+│       └── taylor.py              # Taylor de orden p para EDO de valor inicial
 └── frontend/
-    ├── index.html
-    ├── PuntoFlotante.html
-    ├── Biseccion.html
-    ├── Secante.html
-    ├── FalsaPosicion.html
-    ├── NewtonRaphson.html
-    ├── PuntoFijo.html
+    ├── index.html                 # Menú por módulos
     ├── styles.css
+    ├── PuntoFlotante.html, Biseccion.html, Secante.html, FalsaPosicion.html,
+    │   NewtonRaphson.html, PuntoFijo.html, Steffenson.html, Muller.html,
+    │   Deflacion.html, TrapecioYSimpsons.html, MétodoEuler.html, MetodoTaylor.html
     └── js/
         ├── api.js                   # Helper de conexión con el backend
         ├── tablas-y-recursos.js     # Utilidades compartidas de tabla/resultado
-        ├── puntoFlotante.js
-        ├── biseccion.js
-        ├── secante.js
-        ├── falsa-posicion.js
-        ├── newton-raphson.js
-        └── punto-fijo.js
+        ├── index.js
+        └── un script por método (biseccion.js, secante.js, ..., taylor.js)
 ```
 
 ## Cómo ejecutarlo
@@ -68,6 +68,16 @@ frontend, así que no necesitas nada más.
   Debajo de la tabla se dibuja una gráfica con g(x), |g'(x)| y la recta
   identidad y = x, junto con un recuadro punteado que marca el intervalo
   [a, b] × [a, b] (igual que en el análisis gráfico clásico de punto fijo).
+
+- **Steffensen** — acelera Punto Fijo con el proceso Δ² de Aitken a partir de un
+  único valor inicial.
+- **Müller** — usa 3 aproximaciones iniciales y una parábola; encuentra raíces
+  reales y complejas.
+- **Deflación** — obtiene todas las raíces de un polinomio (división sintética).
+- **Trapecio y Simpson (1/3 y 3/8)** — integración numérica, en versión simple
+  y compuesta.
+- **Euler** — EDO de valor inicial: w_{i+1} = w_i + h·f(t_i, w_i).
+- **Taylor** — EDO de valor inicial con serie de Taylor de orden p.
 
 ## Estructura lista para más métodos
 
