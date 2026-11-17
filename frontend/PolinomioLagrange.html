@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpolación polinomial — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="layout-grafica.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page page--wide">
+        <a class="back-link" href="index.html#interpolacion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Interpolación</p>
+            <h1>Interpolación polinomial</h1>
+            <p class="page-header__intro">
+                Obtén el polinomio que pasa por N puntos equiespaciados de f(x) en [a, b] con Lagrange,
+                Neville o diferencias divididas, mira el procedimiento paso a paso y compáralo contra
+                la función original en una gráfica.
+            </p>
+        </header>
+
+        <div class="split-layout">
+
+          <!-- Columna izquierda: configuración y resultado -->
+          <div class="split-layout__col">
+
+            <!-- Configuración -->
+            <section class="panel split-layout__config" aria-labelledby="config-title">
+                <h2 id="config-title">Configuración</h2>
+
+                <div class="field">
+                    <span class="field-label" id="method-label">Método</span>
+                    <div class="segmented" id="method-selector" role="group" aria-labelledby="method-label">
+                        <button type="button" class="segmented__btn is-active" data-metodo="lagrange" aria-pressed="true">Lagrange</button>
+                        <button type="button" class="segmented__btn" data-metodo="neville" aria-pressed="false">Neville</button>
+                        <button type="button" class="segmented__btn" data-metodo="diferencias" aria-pressed="false">Dif. divididas</button>
+                    </div>
+                </div>
+
+                <p class="formula-hint" id="method-hint"></p>
+
+                <div class="field">
+                    <label for="function-input">Función f(x)</label>
+                    <input type="text" id="function-input" placeholder="Ejemplo: sin(x), exp(x), 1/(1+x**2)" autocomplete="off">
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="point-a">Punto inicial a</label>
+                        <input type="text" id="point-a" inputmode="decimal" placeholder="Ejemplo: 0" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="point-b">Punto final b</label>
+                        <input type="text" id="point-b" inputmode="decimal" placeholder="Ejemplo: 3" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="point-count">Número de puntos (nodos)</label>
+                    <input type="text" id="point-count" inputmode="numeric" placeholder="Ejemplo: 5 (entre 2 y 20)" autocomplete="off">
+                </div>
+
+                <p class="formula-hint">
+                    Se toman N puntos equiespaciados entre a y b (incluyendo ambos extremos), con
+                    h = (b − a)/(N − 1). El polinomio resultante tiene grado N − 1.
+                </p>
+
+                <div class="field">
+                    <label for="evaluate-x" id="evaluate-label">Evaluar P(x) en (opcional)</label>
+                    <input type="text" id="evaluate-x" inputmode="decimal" placeholder="Ejemplo: 1.5" autocomplete="off">
+                </div>
+
+                <button class="btn" id="calcular-lagrange" type="button">Calcular solución</button>
+            </section>
+
+            <!-- Resultado (debajo de la configuración) -->
+            <section class="result-panel split-layout__result" aria-live="polite">
+                <h2>Resultado</h2>
+                <p id="result"></p>
+                <p id="error-message" class="error-text"></p>
+
+                <div id="lagrange-detalle" hidden>
+                    <div id="method-form" hidden>
+                        <h3 class="subsection__title" id="method-form-title"></h3>
+                        <code class="poly-output" id="method-form-output"></code>
+                    </div>
+
+                    <div class="poly-header">
+                        <h3 class="subsection__title">Polinomio expandido</h3>
+                        <button class="btn btn--ghost btn--small" id="copiar-polinomio" type="button">Copiar</button>
+                    </div>
+                    <code class="poly-output" id="polynomial-output"></code>
+
+                    <p class="result-note" id="evaluation-output" hidden></p>
+                    <p class="result-note" id="max-error-output"></p>
+                </div>
+            </section>
+
+          </div>
+
+          <!-- Columna derecha: gráfica y, debajo, el procedimiento paso a paso -->
+          <div class="split-layout__col">
+
+            <!-- Gráfica (en celular va entre la configuración y el resultado) -->
+            <section class="panel split-layout__graph" aria-labelledby="graph-title">
+                <h2 id="graph-title">Gráfica: f(x) y P(x)</h2>
+                <p class="graph-empty" id="graph-empty">La gráfica aparecerá aquí al calcular la solución.</p>
+                <div class="graph-frame" id="graph-frame" hidden>
+                    <svg id="graph-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
+                <div class="graph-legend" id="graph-legend"></div>
+            </section>
+
+            <!-- Procedimiento paso a paso (debajo de la gráfica; en celular va al final) -->
+            <section class="panel split-layout__steps" id="steps-panel" aria-labelledby="steps-title" hidden>
+                <h2 id="steps-title">Procedimiento paso a paso</h2>
+                <h3 class="subsection__title" id="steps-heading"></h3>
+                <p class="steps-description" id="steps-description"></p>
+                <ul class="steps-formulas" id="steps-formulas" hidden></ul>
+                <div class="table-wrap">
+                    <table class="steps-table" id="steps-table">
+                        <thead id="steps-head"></thead>
+                        <tbody id="steps-body"></tbody>
+                    </table>
+                </div>
+                <p class="result-note" id="steps-summary" hidden></p>
+            </section>
+
+          </div>
+
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/grafica.js"></script>
+    <script src="js/lagrange.js"></script>
+</body>
+</html>
