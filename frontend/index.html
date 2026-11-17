@@ -6,8 +6,379 @@
     <title>Proyecto Métodos Numéricos — LMDA · MRF</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ==========================================================================
+           EXPANSIÓN WIDESCREEN Y DISEÑO RESPONSIVO AVANZADO
+           ========================================================================== */
+        :root {
+            --container-max: 1440px;
+            --container-pad: clamp(1.25rem, 4vw, 3.5rem);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Expansión de contenedores principales */
+        .hero,
+        main,
+        .section,
+        .footer {
+            width: 100% !important;
+            max-width: var(--container-max) !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: var(--container-pad) !important;
+            padding-right: var(--container-pad) !important;
+            box-sizing: border-box;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Hero modernizado a ancho completo */
+        .hero {
+            display: grid !important;
+            grid-template-columns: 1.35fr 0.85fr;
+            align-items: center;
+            gap: clamp(1.5rem, 4vw, 3.5rem);
+            padding-top: clamp(2rem, 4vw, 3.5rem) !important;
+            padding-bottom: clamp(2rem, 4vw, 3rem) !important;
+        }
+
+        .hero__text {
+            max-width: 100% !important;
+        }
+
+        .hero__kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.25));
+            background: rgba(120, 120, 140, 0.08);
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.25rem, 4.5vw, 3.75rem) !important;
+            line-height: 1.08;
+            margin-bottom: 1rem;
+        }
+
+        .hero__intro {
+            font-size: clamp(1rem, 1.25vw, 1.15rem);
+            max-width: 68ch !important;
+            line-height: 1.65;
+            opacity: 0.9;
+        }
+
+        /* Tarjetas de resumen rápido en el Hero */
+        .hero__stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(110px, 1fr));
+            gap: 0.85rem;
+            margin-top: 1.75rem;
+            max-width: 560px;
+        }
+
+        .stat-box {
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.22));
+            background: rgba(120, 120, 140, 0.05);
+            backdrop-filter: blur(6px);
+        }
+
+        .stat-box__num {
+            display: block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent, #3b82f6);
+            line-height: 1.2;
+        }
+
+        .stat-box__label {
+            font-size: 0.78rem;
+            opacity: 0.75;
+        }
+
+        .hero__visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero__curve {
+            width: 100% !important;
+            max-width: 420px !important;
+            height: auto !important;
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.2));
+            background: rgba(120, 120, 140, 0.04);
+        }
+
+        /* Barra de herramientas: Título, Buscador y Botones */
+        .section__toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-strong, rgba(120, 120, 140, 0.2));
+        }
+
+        .section__toolbar h2 {
+            margin: 0 !important;
+            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+        }
+
+        .toolbar__controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+            max-width: 380px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.6rem 0.9rem 0.6rem 2.25rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.3));
+            background: rgba(120, 120, 140, 0.06);
+            color: inherit;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .toolbar__btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tool-btn {
+            padding: 0.55rem 0.9rem;
+            border-radius: 9px;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.28));
+            background: rgba(120, 120, 140, 0.06);
+            color: inherit;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tool-btn:hover,
+        .tool-btn.is-active {
+            border-color: var(--accent, #3b82f6);
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        /* ==========================================================================
+           GRID DE MÓDULOS Y TARJETAS DE MÉTODOS
+           ========================================================================== */
+        .modules {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.25rem !important;
+            align-items: start;
+        }
+
+        .module {
+            border-radius: 14px !important;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.22)) !important;
+            background: rgba(120, 120, 140, 0.03);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+
+        .module:hover {
+            border-color: var(--accent, rgba(59, 130, 246, 0.5)) !important;
+        }
+
+        /* Si un módulo se despliega, abarca las 2 columnas para lucir sus tarjetas */
+        .module:has(.module__header[aria-expanded="true"]) {
+            grid-column: 1 / -1;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        .module__header {
+            padding: 1.15rem 1.35rem !important;
+            width: 100%;
+        }
+
+        /* Grid interno de tarjetas de métodos dentro de cada módulo */
+        .module__content {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 0.9rem !important;
+            padding: 0.5rem 1.35rem 1.35rem 1.35rem !important;
+        }
+
+        .method-card {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start !important;
+            gap: 0.85rem;
+            padding: 1.1rem 1.2rem !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border-strong, rgba(120, 120, 140, 0.22)) !important;
+            background: rgba(120, 120, 140, 0.04);
+            text-decoration: none;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .method-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent, #3b82f6) !important;
+            background: rgba(59, 130, 246, 0.07);
+        }
+
+        .method-card__body h3 {
+            font-size: 1.02rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .method-card__body p {
+            font-size: 0.86rem;
+            line-height: 1.45;
+            opacity: 0.82;
+            margin: 0;
+        }
+
+        .method-card__tag {
+            align-self: flex-end;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.76rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .module-empty {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 0.75rem 0;
+        }
+
+        /* Estado oculto al filtrar */
+        .is-hidden-filter {
+            display: none !important;
+        }
+
+        /* Footer espaciado */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem !important;
+            padding-bottom: 2rem !important;
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           BREAKPOINTS RESPONSIVOS (TABLET Y MÓVIL)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .hero__visual {
+                justify-content: flex-start;
+            }
+
+            .hero__curve {
+                max-width: 100% !important;
+                height: 160px !important;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero__stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section__toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar__controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .toolbar__btns {
+                justify-content: space-between;
+            }
+
+            .tool-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .module__content {
+                grid-template-columns: 1fr;
+                padding: 0.5rem 1rem 1rem 1rem !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -15,29 +386,65 @@
 
     <header class="hero">
         <div class="hero__text">
-            <p class="hero__kicker">Proyecto académico</p>
+            <p class="hero__kicker">Proyecto académico · ESCOM IPN</p>
             <h1>Métodos Numéricos</h1>
             <p class="hero__intro">
-                Implementación y análisis de algoritmos para resolver problemas
-                matemáticos complejos: ecuaciones, interpolación, integración
-                y otros métodos utilizados en cómputo numérico.
+                Implementación y análisis interactivo de algoritmos para resolver problemas
+                matemáticos complejos: raíces de ecuaciones, interpolación polinomial,
+                integración numérica y ecuaciones diferenciales ordinarias.
             </p>
+            <div class="hero__stats" aria-label="Resumen del proyecto">
+                <div class="stat-box">
+                    <span class="stat-box__num" id="stat-modulos">09</span>
+                    <span class="stat-box__label">Módulos del curso</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box__num" id="stat-metodos">13</span>
+                    <span class="stat-box__label">Métodos interactivos</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box__num">2D + Tablas</span>
+                    <span class="stat-box__label">Gráficas y paso a paso</span>
+                </div>
+            </div>
         </div>
-        <svg class="hero__curve" viewBox="0 0 240 160" aria-hidden="true">
-            <line x1="10" y1="150" x2="230" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
-            <line x1="10" y1="10" x2="10" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
-            <path d="M 10 20 C 60 20, 70 140, 120 140 S 180 148, 230 149.5"
-                  fill="none" stroke="var(--accent)" stroke-width="2"/>
-            <circle cx="10" cy="20" r="3" fill="var(--accent)"/>
-            <circle cx="70" cy="118" r="3" fill="var(--accent)" opacity="0.7"/>
-            <circle cx="120" cy="140" r="3" fill="var(--accent)" opacity="0.5"/>
-            <circle cx="230" cy="149.5" r="3" fill="var(--accent)" opacity="0.3"/>
-        </svg>
+
+        <div class="hero__visual">
+            <svg class="hero__curve" viewBox="0 0 240 160" aria-hidden="true">
+                <line x1="10" y1="150" x2="230" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
+                <line x1="10" y1="10" x2="10" y2="150" stroke="var(--border-strong)" stroke-width="1"/>
+                <path d="M 10 20 C 60 20, 70 140, 120 140 S 180 148, 230 149.5"
+                      fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+                <circle cx="10" cy="20" r="3.5" fill="var(--accent)"/>
+                <circle cx="70" cy="118" r="3.5" fill="var(--accent)" opacity="0.75"/>
+                <circle cx="120" cy="140" r="3.5" fill="var(--accent)" opacity="0.55"/>
+                <circle cx="230" cy="149.5" r="3.5" fill="var(--accent)" opacity="0.35"/>
+            </svg>
+        </div>
     </header>
 
     <main>
         <section class="section" aria-labelledby="modulos-titulo">
-            <h2 id="modulos-titulo">Módulos</h2>
+            <div class="section__toolbar">
+                <h2 id="modulos-titulo">Módulos</h2>
+
+                <div class="toolbar__controls">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="search" id="method-search" placeholder="Buscar método (ej. Lagrange, Newton, Euler)..." aria-label="Buscar método numérico">
+                    </div>
+
+                    <div class="toolbar__btns">
+                        <button type="button" class="tool-btn is-active" id="btn-filter-all">Todos</button>
+                        <button type="button" class="tool-btn" id="btn-filter-active">Con métodos</button>
+                        <button type="button" class="tool-btn" id="btn-expand-all">Expandir todo</button>
+                        <button type="button" class="tool-btn" id="btn-collapse-all">Contraer todo</button>
+                    </div>
+                </div>
+            </div>
 
             <!--
                 ================================================================
@@ -55,13 +462,6 @@
                     </div>
                     <span class="method-card__tag">etiqueta</span>
                 </a>
-
-                - Cuando un módulo tiene al menos un método, el aviso
-                  "Próximamente" desaparece solo y el contador se actualiza.
-                - Borra el <p class="module-empty"> del módulo cuando ya
-                  tenga métodos.
-                - Para un módulo nuevo, copia un <article class="module">
-                  completo y cambia el id (único), el número y el título.
                 ================================================================
             -->
 
@@ -122,7 +522,7 @@
                                         <h3>Método de la Falsa Posición</h3>
                                         <p>Combina bisección y secante, conservando siempre un intervalo con cambio de signo.</p>
                                     </div>
-                                    <span class="method-card__tag">f(a)·f(b) &lt; 0</span>
+                                    <span class="method-card__tag">f(a)·f(b) < 0</span>
                                 </a>
 
                                 <a class="method-card" href="Secante.html">
@@ -358,5 +758,104 @@
     </footer>
 
     <script src="js/index.js"></script>
+    <script>
+        // Script complementario para búsqueda en vivo, filtros y expandir/contraer
+        document.addEventListener('DOMContentLoaded', () => {
+            const modules = Array.from(document.querySelectorAll('.module'));
+            const searchInput = document.getElementById('method-search');
+            const btnAll = document.getElementById('btn-filter-all');
+            const btnActive = document.getElementById('btn-filter-active');
+            const btnExpandAll = document.getElementById('btn-expand-all');
+            const btnCollapseAll = document.getElementById('btn-collapse-all');
+
+            // Actualizar contadores reales en el Hero
+            const totalModules = modules.length;
+            const totalMethods = document.querySelectorAll('.method-card').length;
+            const statMod = document.getElementById('stat-modulos');
+            const statMet = document.getElementById('stat-metodos');
+            if (statMod) statMod.textContent = String(totalModules).padStart(2, '0');
+            if (statMet) statMet.textContent = String(totalMethods).padStart(2, '0');
+
+            // Función para cambiar el estado de un módulo respetando js/index.js
+            function setModuleExpanded(mod, expand) {
+                const headerBtn = mod.querySelector('.module__header');
+                if (!headerBtn) return;
+                const isExpanded = headerBtn.getAttribute('aria-expanded') === 'true';
+                if (isExpanded !== expand) {
+                    headerBtn.click();
+                }
+            }
+
+            // Expandir / Contraer todos
+            btnExpandAll?.addEventListener('click', () => {
+                modules.forEach(mod => {
+                    if (!mod.classList.contains('is-hidden-filter')) {
+                        setModuleExpanded(mod, true);
+                    }
+                });
+            });
+
+            btnCollapseAll?.addEventListener('click', () => {
+                modules.forEach(mod => setModuleExpanded(mod, false));
+            });
+
+            // Filtro: Todos vs Con métodos
+            let onlyActive = false;
+
+            function applyFilters() {
+                const query = (searchInput?.value || '').trim().toLowerCase();
+
+                modules.forEach(mod => {
+                    const cards = Array.from(mod.querySelectorAll('.method-card'));
+                    const modTitle = (mod.querySelector('.module__title')?.textContent || '').toLowerCase();
+                    const hasMethods = cards.length > 0;
+
+                    if (onlyActive && !hasMethods) {
+                        mod.classList.add('is-hidden-filter');
+                        return;
+                    }
+
+                    if (!query) {
+                        mod.classList.remove('is-hidden-filter');
+                        cards.forEach(c => c.classList.remove('is-hidden-filter'));
+                        return;
+                    }
+
+                    const titleMatches = modTitle.includes(query);
+                    let anyCardMatches = false;
+
+                    cards.forEach(card => {
+                        const text = card.textContent.toLowerCase();
+                        const match = titleMatches || text.includes(query);
+                        card.classList.toggle('is-hidden-filter', !match);
+                        if (match) anyCardMatches = true;
+                    });
+
+                    const showModule = titleMatches || anyCardMatches;
+                    mod.classList.toggle('is-hidden-filter', !showModule);
+
+                    if (showModule && query.length > 0) {
+                        setModuleExpanded(mod, true);
+                    }
+                });
+            }
+
+            searchInput?.addEventListener('input', applyFilters);
+
+            btnAll?.addEventListener('click', () => {
+                onlyActive = false;
+                btnAll.classList.add('is-active');
+                btnActive?.classList.remove('is-active');
+                applyFilters();
+            });
+
+            btnActive?.addEventListener('click', () => {
+                onlyActive = true;
+                btnActive.classList.add('is-active');
+                btnAll?.classList.remove('is-active');
+                applyFilters();
+            });
+        });
+    </script>
 </body>
 </html>
