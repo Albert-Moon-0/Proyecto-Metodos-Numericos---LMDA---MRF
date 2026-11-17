@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spline cúbico — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="layout-grafica.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page page--wide">
+        <a class="back-link" href="index.html#splines">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Splines</p>
+            <h1>Spline cúbico natural</h1>
+            <p class="page-header__intro">
+                Ajusta un polinomio cúbico por tramos que pasa por N puntos equiespaciados de f(x) en
+                [a, b], con segunda derivada nula en los extremos. Mira el sistema tridiagonal, los
+                coeficientes de cada tramo y compara los splines contra la función original.
+            </p>
+        </header>
+
+        <div class="split-layout">
+
+          <!-- Columna izquierda: configuración y resultado -->
+          <div class="split-layout__col">
+
+            <!-- Configuración -->
+            <section class="panel split-layout__config" aria-labelledby="config-title">
+                <h2 id="config-title">Configuración</h2>
+
+                <p class="formula-hint">
+                    Sⱼ(x) = aⱼ + bⱼ(x − xⱼ) + cⱼ(x − xⱼ)² + dⱼ(x − xⱼ)³ en [xⱼ, xⱼ₊₁].
+                    Frontera natural: S″(x₀) = S″(xₙ) = 0.
+                </p>
+
+                <div class="field">
+                    <label for="function-input">Función f(x)</label>
+                    <input type="text" id="function-input" placeholder="Ejemplo: sin(x), exp(x), 1/(1+x**2)" autocomplete="off">
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="point-a">Punto inicial a</label>
+                        <input type="text" id="point-a" inputmode="decimal" placeholder="Ejemplo: -3" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="point-b">Punto final b</label>
+                        <input type="text" id="point-b" inputmode="decimal" placeholder="Ejemplo: 3" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="point-count">Número de puntos (nodos)</label>
+                    <input type="text" id="point-count" inputmode="numeric" placeholder="Ejemplo: 7 (entre 3 y 40)" autocomplete="off">
+                </div>
+
+                <p class="formula-hint">
+                    Se toman N puntos equiespaciados entre a y b (incluyendo ambos extremos), con
+                    h = (b − a)/(N − 1). El spline tiene N − 1 tramos.
+                </p>
+
+                <div class="field">
+                    <label for="evaluate-x">Evaluar S(x) en (opcional)</label>
+                    <input type="text" id="evaluate-x" inputmode="decimal" placeholder="Ejemplo: 1.5 (dentro de [a, b])" autocomplete="off">
+                </div>
+
+                <button class="btn" id="calcular-spline" type="button">Calcular solución</button>
+            </section>
+
+            <!-- Resultado (debajo de la configuración) -->
+            <section class="result-panel split-layout__result" aria-live="polite">
+                <h2>Resultado</h2>
+                <p id="result"></p>
+                <p id="error-message" class="error-text"></p>
+
+                <div id="spline-detalle" hidden>
+                    <div class="poly-header">
+                        <h3 class="subsection__title">Splines cúbicos por tramo</h3>
+                        <button class="btn btn--ghost btn--small" id="copiar-splines" type="button">Copiar</button>
+                    </div>
+                    <code class="poly-output poly-output--scroll" id="spline-output"></code>
+
+                    <p class="result-note" id="evaluation-output" hidden></p>
+                    <p class="result-note" id="max-error-output"></p>
+                </div>
+            </section>
+
+          </div>
+
+          <!-- Columna derecha: gráfica y, debajo, el procedimiento paso a paso -->
+          <div class="split-layout__col">
+
+            <!-- Gráfica (en celular va entre la configuración y el resultado) -->
+            <section class="panel split-layout__graph" aria-labelledby="graph-title">
+                <h2 id="graph-title">Gráfica: f(x) y los splines</h2>
+                <p class="graph-empty" id="graph-empty">La gráfica aparecerá aquí al calcular la solución.</p>
+                <div class="graph-frame" id="graph-frame" hidden>
+                    <svg id="graph-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
+                <div class="graph-legend" id="graph-legend"></div>
+            </section>
+
+            <!-- Procedimiento paso a paso (debajo de la gráfica; en celular va al final) -->
+            <section class="panel split-layout__steps" id="steps-panel" aria-labelledby="steps-title" hidden>
+                <h2 id="steps-title">Procedimiento paso a paso</h2>
+                <div id="steps-sections"></div>
+            </section>
+
+          </div>
+
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/grafica.js"></script>
+    <script src="js/tabla-pasos.js"></script>
+    <script src="js/spline-cubico.js"></script>
+</body>
+</html>

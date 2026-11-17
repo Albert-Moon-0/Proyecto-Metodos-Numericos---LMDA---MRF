@@ -34,6 +34,8 @@ MODULOS = [
     'lagrange',
     # Integración numérica
     'trapecio_simpsons',
+    # Splines
+    'spline_cubico',
     # Ecuaciones diferenciales
     'euler',
     'taylor',

@@ -12,6 +12,8 @@ Para ejecutarlo:
     cd backend
     pip install -r requirements.txt
     python app.py
+    print("Servidor backend corriendo en http://localhost:5000")
+    
 
 Luego abre http://localhost:5000 en el navegador.
 """
