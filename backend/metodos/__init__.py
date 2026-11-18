@@ -39,4 +39,6 @@ MODULOS = [
     # Ecuaciones diferenciales
     'euler',
     'taylor',
+    'romberg',
+    'cuadratura_adaptativa',
 ]
