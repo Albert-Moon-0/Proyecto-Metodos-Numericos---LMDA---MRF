@@ -8,13 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="layout-grafica.css">
 </head>
 <body>
 
     <div class="bg-grid" aria-hidden="true"></div>
 
     <div class="page">
-        <a class="back-link" href="index.html">
+        <a class="back-link" href="index.html#integracion">
             <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -22,10 +23,11 @@
         </a>
 
         <header class="page-header">
-            <p class="page-header__kicker">Método iterativo</p>
+            <p class="page-header__kicker">Integración numérica</p>
             <h1>Método de Romberg</h1>
             <p class="page-header__intro">
-                Método numérico para calcular integrales definidas con alta precisión.
+                Calcula integrales definidas con alta precisión: aplica la regla del trapecio
+                con 1, 2, 4, 8… subintervalos y mejora cada resultado con extrapolación de Richardson.
             </p>
         </header>
 
@@ -34,7 +36,7 @@
 
             <div class="field">
                 <label for="function-input">Función f(x)</label>
-                <input type="text" id="function-input" placeholder="Ejemplo: x**2 - 3, sin(x) + cos(x), exp(x) - 5, e**x - 5">
+                <input type="text" id="function-input" placeholder="Ejemplo: x**2, sin(x), exp(x), 1/(1+x**2)">
             </div>
 
             <div class="field-row">
@@ -52,7 +54,7 @@
                 </div>
                 <div class="field">
                     <label for="max-iterations">Iteraciones máximas</label>
-                    <input type="text" id="max-iterations" placeholder="Ejemplo: 10">
+                    <input type="text" id="max-iterations" placeholder="Ejemplo: 10 (máx. 15)">
                 </div>
             </div>
 
@@ -60,23 +62,12 @@
         </section>
 
         <section class="panel" aria-labelledby="table-title">
-            <h2 id="table-title">Iteraciones</h2>
-            <div class="table-wrap">
-                <table id="result-table">
-                    <thead>
-                        <tr>
-                            <th>n</th>
-                            <th>I(h)</th>
-                            <!-- Se agregarán más columnas dinámicamente según el número de iteraciones -->
-                            
-
-                        </tr>
-                    </thead>
-                    <tbody id="result-table-body">
-                        <!-- Los resultados se agregan aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
+            <h2 id="table-title">Tabla de Romberg</h2>
+            <p class="steps-description">
+                Columna 0 = trapecio con n = 2ᵏ subintervalos; cada columna siguiente extrapola la anterior.
+                La diagonal (resaltada) es la mejor aproximación de cada fila.
+            </p>
+            <div id="steps-sections"></div>
         </section>
 
         <section class="result-panel" aria-live="polite">
@@ -88,6 +79,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/tabla-pasos.js"></script>
     <script src="js/romberg.js"></script>
 </body>
 </html>

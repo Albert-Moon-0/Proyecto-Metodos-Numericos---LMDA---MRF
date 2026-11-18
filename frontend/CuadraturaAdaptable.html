@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadratura Adaptativa — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page">
+        <a class="back-link" href="index.html#integracion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Integración numérica</p>
+            <h1>Cuadratura adaptativa</h1>
+            <p class="page-header__intro">
+                Aplica Simpson 1/3 y subdivide a la mitad solo los intervalos donde
+                |S(a, b) − S(a, c) − S(c, b)| no es menor que 15E. Cada intervalo es un nodo
+                del árbol binario que se muestra abajo.
+            </p>
+        </header>
+
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: sin(x), exp(x), 1/(1+x**2)">
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="point-a">Punto a</label>
+                    <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                </div>
+                <div class="field">
+                    <label for="point-b">Punto b</label>
+                    <input type="text" id="point-b" placeholder="Ejemplo: 3.14159">
+                </div>
+                <div class="field">
+                    <label for="tolerance">Error máximo E</label>
+                    <input type="text" id="tolerance" placeholder="Ejemplo: 0.0001">
+                </div>
+                <div class="field">
+                    <label for="max-level">Nivel máximo del árbol</label>
+                    <input type="text" id="max-level" placeholder="Ejemplo: 6 (máx. 12)">
+                </div>
+            </div>
+
+            <button class="btn" id="calcular-adaptativa" type="button">Calcular integral</button>
+        </section>
+
+        <section class="result-panel" aria-live="polite">
+            <h2>Resultado</h2>
+            <p id="result"></p>
+            <p id="error-message" class="error-text"></p>
+        </section>
+
+        <section class="panel" aria-labelledby="tree-title">
+            <div class="tree-toolbar">
+                <h2 id="tree-title">Árbol de subdivisiones</h2>
+                <div class="tree-toolbar__actions">
+                    <button class="btn btn--ghost btn--small" id="ajustar-arbol" type="button" disabled>Ajustar vista</button>
+                    <button class="btn btn--ghost btn--small" id="descargar-arbol" type="button" disabled>Descargar PNG</button>
+                </div>
+            </div>
+
+            <ul class="tree-legend" aria-label="Leyenda de colores">
+                <li><span class="tree-legend__dot tree-legend__dot--ok"></span>Cumple (&lt; 15E): intervalo aceptado</li>
+                <li><span class="tree-legend__dot tree-legend__dot--split"></span>No cumple (≥ 15E): se divide</li>
+                <li><span class="tree-legend__dot tree-legend__dot--limit"></span>No cumple y llegó al nivel máximo</li>
+            </ul>
+
+            <div class="tree-canvas">
+                <div id="arbol-cy" aria-label="Árbol binario de subdivisiones"></div>
+                <p class="tree-empty" id="arbol-vacio">El árbol aparecerá aquí después de calcular.</p>
+            </div>
+            <p class="tree-hint">Arrastra para moverte y usa la rueda para acercar. Cada nodo muestra: E · S(a, c) + S(c, b) · error permitido · error aproximado.</p>
+        </section>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/vendor/cytoscape.min.js"></script>
+    <script src="js/cuadratura-adaptativa.js"></script>
+</body>
+</html>
