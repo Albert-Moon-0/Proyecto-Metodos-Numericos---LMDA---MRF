@@ -1,0 +1,253 @@
+/* Layout "configuración + resultado a la izquierda, gráfica a la derecha".
+   Reutilizable por cualquier método que grafique (se carga DESPUÉS de styles.css).
+
+   Estructura esperada dentro de <div class="page page--wide">:
+
+   <div class="split-layout">
+       <div class="split-layout__col">
+           <section class="panel split-layout__config">…</section>
+           <section class="result-panel split-layout__result">…</section>
+       </div>
+       <div class="split-layout__col">
+           <section class="panel split-layout__graph">…</section>
+           <section class="panel split-layout__steps">…</section>   (opcional)
+       </div>
+   </div>
+
+   En pantallas grandes: dos columnas (config + resultado | gráfica + pasos).
+   En celular / tablet angosta: una columna con el orden config → gráfica → resultado → pasos. */
+
+.page--wide {
+    max-width: 76rem;
+}
+
+.split-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+    align-items: start;
+}
+
+.split-layout__col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.split-layout__config {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    order: 1;
+}
+
+.split-layout__config h2 {
+    margin-bottom: 0;
+}
+
+.split-layout__col > .result-panel {
+    margin-top: 0;
+    min-width: 0;
+    order: 3;
+}
+
+.split-layout__graph {
+    min-width: 0;
+    order: 2;
+}
+
+.split-layout__steps {
+    min-width: 0;
+    order: 4;
+}
+
+.split-layout__steps h2 {
+    margin-bottom: 0.25rem;
+}
+
+.split-layout__graph .graph-legend {
+    margin-top: 0.9rem;
+}
+
+.graph-empty {
+    margin: 0;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+}
+
+.split-layout [hidden] {
+    display: none !important;
+}
+
+/* ---------- Resultado: polinomio y notas ---------- */
+
+#method-form {
+    margin-top: 1.25rem;
+}
+
+#method-form .subsection__title {
+    margin-bottom: 0;
+}
+
+.poly-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.poly-header .subsection__title {
+    margin: 0;
+}
+
+.poly-header .btn {
+    margin-top: 0;
+}
+
+.poly-output {
+    display: block;
+    margin-top: 0.6rem;
+    padding: 0.75rem 0.85rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--accent);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.split-layout .result-note {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+
+#lagrange-detalle .subsection__title {
+    font-size: 0.9375rem;
+}
+
+#lagrange-detalle > .subsection__title {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+
+/* ---------- Selector de método (ocupa todo el ancho y no se desborda) ---------- */
+
+.split-layout .segmented {
+    display: flex;
+    width: 100%;
+}
+
+.split-layout .segmented__btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.split-layout__config .formula-hint {
+    margin: 0;
+}
+
+/* ---------- Procedimiento paso a paso ---------- */
+
+.steps-description {
+    margin: 0 0 0.9rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.steps-formulas {
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    list-style: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    overflow-x: auto;
+}
+
+.steps-formulas li {
+    white-space: nowrap;
+}
+
+.steps-table {
+    min-width: max-content;
+    font-variant-numeric: tabular-nums;
+}
+
+.steps-table th,
+.steps-table td {
+    padding: 0.6rem 0.55rem;
+    font-size: 0.8125rem;
+}
+
+.steps-table td {
+    white-space: nowrap;
+}
+
+.steps-table th {
+    white-space: normal;
+    min-width: 4.2rem;
+}
+
+.steps-table td.is-empty {
+    border-bottom-color: transparent;
+}
+
+.steps-table td.is-highlight {
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 500;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    /* Las columnas "desaparecen" y los paneles se ordenan con order:
+       config (1) → gráfica (2) → resultado (3) → pasos (4). */
+    .split-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+    }
+
+    .split-layout__col {
+        display: contents;
+    }
+}
+
+@media (max-width: 480px) {
+    .page--wide {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .split-layout .panel,
+    .split-layout .result-panel {
+        padding: 1.1rem;
+    }
+
+    .graph-empty {
+        padding: 2.5rem 0.75rem;
+    }
+}
