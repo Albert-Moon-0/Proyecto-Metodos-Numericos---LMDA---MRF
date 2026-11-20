@@ -309,6 +309,7 @@ def calcular():
             raise ErrorTaylor(f'El número de subintervalos no puede pasar de {LIMITE_SUBINTERVALOS}.')
 
         f_expr, t, y = crear_expresion_edo(datos.get('funcion'))
+        
         h, iteraciones, aproximacion = calcular_taylor(f_expr, t, y, t0, tn, n, w0, orden)
 
         mensaje = (

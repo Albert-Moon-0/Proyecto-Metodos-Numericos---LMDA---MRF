@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración Múltiple — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page">
+        <a class="back-link" href="index.html#integracion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Integración múltiple</p>
+            <h1>Integral doble</h1>
+            <p class="page-header__intro">
+                Aproxima la integral doble de f(x, y) con trapecio compuesto, sobre un
+                rectángulo [a, b] × [c, d] o entre dos curvas f₁(x) y f₂(x).
+            </p>
+        </header>
+
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x, y)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: sin(x)*cos(y), exp(x+y), 1/(1+x**2+y**2)">
+            </div>
+
+            <div class="selector-row">
+                <div class="field">
+                    <span class="field-label" id="label-tipo">Delimitación de la región</span>
+                    <div class="segmented" role="group" aria-labelledby="label-tipo">
+                        <button type="button" class="segmented__btn is-active" data-grupo="tipo" data-valor="intervalos" aria-pressed="true">Intervalos</button>
+                        <button type="button" class="segmented__btn" data-grupo="tipo" data-valor="funciones" aria-pressed="false">Funciones</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="formula-hint" id="formula-hint" aria-live="polite"></p>
+
+            <div class="subsection">
+                <h3 class="subsection__title">Variable x</h3>
+                <div class="field-row">
+                    <div class="field">
+                        <label for="point-a">Punto a</label>
+                        <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                    </div>
+                    <div class="field">
+                        <label for="point-b">Punto b</label>
+                        <input type="text" id="point-b" placeholder="Ejemplo: 3.14159">
+                    </div>
+                    <div class="field">
+                        <label for="subint-n">Subintervalos n</label>
+                        <input type="text" id="subint-n" placeholder="Ejemplo: 4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection__title">Variable y</h3>
+                <div class="field-row">
+                    <!-- Intervalos: y va de c a d -->
+                    <div class="field" id="campo-c">
+                        <label for="point-c">Punto c</label>
+                        <input type="text" id="point-c" placeholder="Ejemplo: 0">
+                    </div>
+                    <div class="field" id="campo-d">
+                        <label for="point-d">Punto d</label>
+                        <input type="text" id="point-d" placeholder="Ejemplo: 3.14159">
+                    </div>
+
+                    <!-- Funciones: y va de f1(x) a f2(x) -->
+                    <div class="field" id="campo-f1" hidden>
+                        <label for="function-f1">Curva inferior f₁(x)</label>
+                        <input type="text" id="function-f1" placeholder="Ejemplo: x**2">
+                    </div>
+                    <div class="field" id="campo-f2" hidden>
+                        <label for="function-f2">Curva superior f₂(x)</label>
+                        <input type="text" id="function-f2" placeholder="Ejemplo: x + 1">
+                    </div>
+
+                    <div class="field">
+                        <label for="subint-m">Subintervalos m</label>
+                        <input type="text" id="subint-m" placeholder="Ejemplo: 4">
+                    </div>
+                </div>
+
+                <button class="btn" id="calcular-integracion-multiple" type="button">Calcular integral</button>
+            </div>
+        </section>
+
+        <section class="result-panel" aria-live="polite">
+            <h2>Resultado</h2>
+            <p id="result"></p>
+            <p id="error-message" class="error-text"></p>
+        </section>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/integracion-multiple.js"></script>
+</body>
+</html>

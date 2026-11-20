@@ -41,4 +41,6 @@ MODULOS = [
     'taylor',
     'romberg',
     'cuadratura_adaptativa',
+    'cuadratura_gaussiana',
+    'integracion-multiple',
 ]

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadratura Gaussiana — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page">
+        <a class="back-link" href="index.html#integracion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Integración numérica</p>
+            <h1>Cuadratura gaussiana</h1>
+            <p class="page-header__intro">
+                Aproxima la integral de f(x) en [a, b] con n puntos de Gauss-Legendre.
+            </p>
+        </header>
+
+        <section class="panel" aria-labelledby="config-title">
+            <h2 id="config-title">Configuración</h2>
+
+            <div class="field">
+                <label for="function-input">Función f(x)</label>
+                <input type="text" id="function-input" placeholder="Ejemplo: sin(x), exp(x), 1/(1+x**2)">
+            </div>
+
+            <div class="selector-row">
+                <div class="field">
+                    <span class="field-label" id="label-tipo">Tipo</span>
+                    <div class="segmented" role="group" aria-labelledby="label-tipo">
+                        <button type="button" class="segmented__btn is-active" data-grupo="tipo" data-valor="simple" aria-pressed="true">Simple</button>
+                        <button type="button" class="segmented__btn" data-grupo="tipo" data-valor="compuesto" aria-pressed="false">Compuesta</button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label" id="label-grado">Grado n (número de puntos)</span>
+                    <div class="segmented segmented--wrap" id="selector-grado" role="group" aria-labelledby="label-grado">
+                        <!-- Los botones de grado se crean desde las constantes del backend -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-row subsection">
+                <div class="field">
+                    <label for="point-a">Punto a</label>
+                    <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                </div>
+                <div class="field">
+                    <label for="point-b">Punto b</label>
+                    <input type="text" id="point-b" placeholder="Ejemplo: 3.14159">
+                </div>
+                <div class="field" id="campo-subintervalos" hidden>
+                    <label for="subintervalos">Subintervalos m</label>
+                    <input type="text" id="subintervalos" placeholder="Ejemplo: 4">
+                </div>
+            </div>
+
+            <button class="btn" id="calcular-gauss" type="button">Calcular integral</button>
+        </section>
+
+        <!-- Columna derecha: resultado arriba y la fórmula del grado elegido debajo -->
+        <aside class="answer-column" aria-label="Respuesta">
+            <section class="result-panel" aria-live="polite">
+                <h2>Resultado</h2>
+                <p id="result"></p>
+                <p id="error-message" class="error-text"></p>
+            </section>
+
+            <section class="panel formula-panel" aria-labelledby="formula-title">
+                <h2 id="formula-title">Fórmula</h2>
+                <p class="formula-nota" id="formula-exactitud"></p>
+                <div id="formula-contenido"></div>
+            </section>
+        </aside>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/cuadratura-gaussiana.js"></script>
+</body>
+</html>
