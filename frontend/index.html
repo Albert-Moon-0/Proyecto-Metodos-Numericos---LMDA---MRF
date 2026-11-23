@@ -752,7 +752,7 @@
                     <h3 class="module__heading">
                         <button class="module__header" type="button" aria-expanded="false" aria-controls="panel-ecuaciones-diferenciales">
                             <span class="module__index">09</span>
-                            <span class="module__title">Solución Numérica de Ecuaciones Diferenciales Ordinarias</span>
+                            <span class="module__title">Solución Numérica de EDO's</span>
                             <span class="module__count"></span>
                             <svg class="module__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                 <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -775,6 +775,13 @@
                                         <p>Aproxima la solución de dy/dt = f(t, y) usando series de Taylor.</p>
                                     </div>
                                     <span class="method-card__tag">wᵢ₊₁ = wᵢ + h·f + (h²/2!)·f' + ...</span>
+                                </a>
+                                <a class="method-card" href="RungeKutta.html">
+                                    <div class="method-card__body">
+                                        <h3>Método de RK y RK Fehlberg</h3>
+                                        <p>Aproxima la solución de dy/dt = f(t, y) usando un esquema de cuadratura.</p>
+                                    </div>
+                                    <span class="method-card__tag">wᵢ₊₁ = wᵢ + h·f(tᵢ + h/2, wᵢ + h/2·k₁)</span>
                                 </a>
                                 
                             </div>

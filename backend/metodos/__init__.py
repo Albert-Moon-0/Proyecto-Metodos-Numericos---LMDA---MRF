@@ -43,4 +43,5 @@ MODULOS = [
     'cuadratura_adaptativa',
     'cuadratura_gaussiana',
     'integracion-multiple',
+    'runge_kutta',
 ]

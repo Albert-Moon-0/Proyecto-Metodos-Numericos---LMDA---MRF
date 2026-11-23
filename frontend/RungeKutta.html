@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runge-Kutta y Fehlberg — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- page--una-columna: esta página arma su propia rejilla (ver styles-rk-agregar.css) -->
+    <div class="page page--una-columna rk-page">
+        <a class="back-link" href="index.html#ecuaciones-diferenciales">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Ecuaciones diferenciales</p>
+            <h1>Runge-Kutta y Runge-Kutta-Fehlberg</h1>
+            <p class="page-header__intro">
+                Resuelve dy/dt = f(t, y), y(t₀) = w₀. En Runge-Kutta se muestran las K
+                (las pendientes que se reescriben como variables) con su fórmula y sus valores;
+                en Fehlberg se muestran wᵢ, w̃ᵢ, R, q y si el paso se acepta o se rechaza.
+            </p>
+        </header>
+
+        <div class="rk-top">
+            <section class="panel" aria-labelledby="config-title">
+                <h2 id="config-title">Configuración</h2>
+
+                <div class="field">
+                    <label for="function-input">Función f(t, y)</label>
+                    <input type="text" id="function-input" placeholder="Ejemplo: y - t**2 + 1, t*exp(3*t) - 2*y">
+                </div>
+
+                <div class="selector-row">
+                    <div class="field">
+                        <span class="field-label" id="label-familia">Método</span>
+                        <div class="segmented" role="group" aria-labelledby="label-familia">
+                            <button type="button" class="segmented__btn is-active" data-grupo="familia" data-valor="rk" aria-pressed="true">Runge-Kutta</button>
+                            <button type="button" class="segmented__btn" data-grupo="familia" data-valor="rkf" aria-pressed="false">Runge-Kutta-Fehlberg</button>
+                        </div>
+                    </div>
+
+                    <div class="field" id="campo-orden">
+                        <span class="field-label" id="label-orden">Orden</span>
+                        <div class="segmented segmented--wrap" role="group" aria-labelledby="label-orden">
+                            <button type="button" class="segmented__btn" data-grupo="orden" data-valor="rk2m" aria-pressed="false">2</button>
+                            <button type="button" class="segmented__btn" data-grupo="orden" data-valor="rk3" aria-pressed="false">3</button>
+                            <button type="button" class="segmented__btn is-active" data-grupo="orden" data-valor="rk4" aria-pressed="true">4</button>
+                            <button type="button" class="segmented__btn" data-grupo="orden" data-valor="rk5" aria-pressed="false">5</button>
+                            <button type="button" class="segmented__btn" data-grupo="orden" data-valor="rk6" aria-pressed="false">6</button>
+                        </div>
+                    </div>
+
+                    <div class="field" id="campo-henk">
+                        <span class="field-label" id="label-henk">Convención de las K</span>
+                        <div class="segmented" role="group" aria-labelledby="label-henk">
+                            <button type="button" class="segmented__btn is-active" data-grupo="henk" data-valor="si" aria-pressed="true">K incluye h</button>
+                            <button type="button" class="segmented__btn" data-grupo="henk" data-valor="no" aria-pressed="false">h fuera de K</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="point-t0">Punto inicial t₀</label>
+                            <input type="text" id="point-t0" placeholder="Ejemplo: 0">
+                        </div>
+                        <div class="field">
+                            <label for="point-tn">Punto final tₙ</label>
+                            <input type="text" id="point-tn" placeholder="Ejemplo: 2">
+                        </div>
+                        <div class="field">
+                            <label for="w0">Valor inicial y(t₀) = w₀</label>
+                            <input type="text" id="w0" placeholder="Ejemplo: 0.5">
+                        </div>
+                        <div class="field" id="campo-n">
+                            <label for="no-subintervalos">Subintervalos n</label>
+                            <input type="text" id="no-subintervalos" placeholder="Ejemplo: 10">
+                        </div>
+                    </div>
+
+                    <!-- Solo Fehlberg -->
+                    <div id="campos-rkf" hidden>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="tol">Tolerancia TOL</label>
+                                <input type="text" id="tol" placeholder="Ejemplo: 1e-5">
+                            </div>
+                            <div class="field">
+                                <label for="hmax">Paso máximo hₘₐₓ</label>
+                                <input type="text" id="hmax" placeholder="Ejemplo: 0.25">
+                            </div>
+                            <div class="field">
+                                <label for="hmin">Paso mínimo hₘᵢₙ</label>
+                                <input type="text" id="hmin" placeholder="Ejemplo: 0.01">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <span class="field-label" id="label-criterio">Se acepta el paso cuando…</span>
+                            <div class="segmented" role="group" aria-labelledby="label-criterio">
+                                <button type="button" class="segmented__btn is-active" data-grupo="criterio" data-valor="R" aria-pressed="true">R ≤ TOL</button>
+                                <button type="button" class="segmented__btn" data-grupo="criterio" data-valor="q" aria-pressed="false">q ≥ 1</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn" id="calcular-rk" type="button">Calcular solución</button>
+                </div>
+            </section>
+
+            <aside class="answer-column">
+                <section class="result-panel" aria-live="polite">
+                    <h2>Resultado aproximado de la EDO</h2>
+                    <p id="result"></p>
+                    <p id="error-message" class="error-text"></p>
+                </section>
+
+                <section class="panel" aria-labelledby="k-title">
+                    <h2 id="k-title">Fórmulas</h2>
+                    <div id="k-contenido" class="k-contenido"></div>
+                </section>
+            </aside>
+        </div>
+
+        <section class="panel" aria-labelledby="table-title">
+            <div class="field-header">
+                <h2 id="table-title">Iteraciones</h2>
+                <div class="segmented" id="selector-k" role="group" aria-label="Mostrar las K en la tabla">
+                    <button type="button" class="segmented__btn is-active" data-grupo="vistak" data-valor="si" aria-pressed="true">Con K</button>
+                    <button type="button" class="segmented__btn" data-grupo="vistak" data-valor="no" aria-pressed="false">Sin K</button>
+                </div>
+            </div>
+            <div id="rkf-resumen" class="rkf-resumen" hidden></div>
+            <div class="table-wrap">
+                <table id="rk-table" class="rk-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/runge-kutta.js"></script>
+</body>
+</html>
