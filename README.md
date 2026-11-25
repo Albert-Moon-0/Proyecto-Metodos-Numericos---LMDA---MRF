@@ -25,6 +25,7 @@ proyecto-metodos-numericos/
 │       ├── muller.py              # Müller (raíces reales y complejas)
 │       ├── deflacion.py           # Deflación (todas las raíces de un polinomio)
 │       ├── trapecio_simpsons.py   # Trapecio, Simpson 1/3 y 3/8 (simples y compuestas)
+│       ├── derivacion_numerica.py # Derivación numérica: 2, 3 y 5 puntos (tabla o f(x))
 │       ├── euler.py               # Euler para EDO de valor inicial
 │       └── taylor.py              # Taylor de orden p para EDO de valor inicial
 └── frontend/
@@ -32,7 +33,8 @@ proyecto-metodos-numericos/
     ├── styles.css
     ├── PuntoFlotante.html, Biseccion.html, Secante.html, FalsaPosicion.html,
     │   NewtonRaphson.html, PuntoFijo.html, Steffenson.html, Muller.html,
-    │   Deflacion.html, TrapecioYSimpsons.html, MétodoEuler.html, MetodoTaylor.html
+    │   Deflacion.html, TrapecioYSimpsons.html, DerivacionNumerica.html,
+    │   MétodoEuler.html, MetodoTaylor.html
     └── js/
         ├── api.js                   # Helper de conexión con el backend
         ├── tablas-y-recursos.js     # Utilidades compartidas de tabla/resultado
@@ -76,6 +78,14 @@ frontend, así que no necesitas nada más.
 - **Deflación** — obtiene todas las raíces de un polinomio (división sintética).
 - **Trapecio y Simpson (1/3 y 3/8)** — integración numérica, en versión simple
   y compuesta.
+- **Derivación numérica** — aproxima f'(x₀) con fórmulas de 2, 3 y 5 puntos
+  (progresiva, regresiva, centrada y descentradas) a partir de datos
+  tabulados o de una f(x). Elige automáticamente la fórmula de mayor orden,
+  compara todas las fórmulas aplicables, estima el error aunque no se conozca
+  f'(x), y con función compara contra la derivada exacta simbólica
+  (`comun/derivador.py`), aplica extrapolación de Richardson y estudia el
+  paso h (error de truncamiento vs. redondeo). Dibuja f(x) con su recta
+  tangente, la derivada en los nodos y la curva error-vs-h.
 - **Euler** — EDO de valor inicial: w_{i+1} = w_i + h·f(t_i, w_i).
 - **Taylor** — EDO de valor inicial con serie de Taylor de orden p.
 

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivación numérica — Métodos Numéricos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="layout-grafica.css">
+</head>
+<body>
+
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page page--wide">
+        <a class="back-link" href="index.html#derivacion">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Volver al proyecto
+        </a>
+
+        <header class="page-header">
+            <p class="page-header__kicker">Derivación numérica</p>
+            <h1>Derivación numérica: 2, 3 y 5 puntos</h1>
+            <p class="page-header__intro">
+                Aproxima f′(x₀) a partir de datos tabulados o de una función f(x) con nodos igualmente
+                espaciados. Elige la fórmula (o deja que se escoja la de mayor orden), compara todas las
+                fórmulas, mira la recta tangente y estudia cómo el paso h afecta el error.
+            </p>
+        </header>
+
+        <div class="split-layout">
+
+          <!-- Columna izquierda: configuración y resultado -->
+          <div class="split-layout__col">
+
+            <!-- Configuración -->
+            <section class="panel split-layout__config" aria-labelledby="config-title">
+                <h2 id="config-title">Configuración</h2>
+
+                <div class="field">
+                    <span class="field-label" id="mode-label">Datos de entrada</span>
+                    <div class="segmented" id="mode-selector" role="group" aria-labelledby="mode-label">
+                        <button type="button" class="segmented__btn is-active" data-modo="tabla" aria-pressed="true">Datos tabulados</button>
+                        <button type="button" class="segmented__btn" data-modo="funcion" aria-pressed="false">Función f(x)</button>
+                    </div>
+                </div>
+
+                <p class="formula-hint" id="mode-hint"></p>
+
+                <!-- Modo: datos tabulados -->
+                <div id="group-tabla">
+                    <div class="field">
+                        <label for="x-values">Valores de x (igualmente espaciados)</label>
+                        <input type="text" id="x-values" placeholder="Ejemplo: 1.0, 1.2, 1.4, 1.6, 1.8" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="fx-values">Valores de f(x)</label>
+                        <input type="text" id="fx-values" placeholder="Ejemplo: -0.035892, -0.033381, -0.027555, -0.020764, -0.014512" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="exact-value">f′(x₀) exacta (opcional, para medir el error real)</label>
+                        <input type="text" id="exact-value" inputmode="decimal" placeholder="Ejemplo: 0.033181" autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Modo: función -->
+                <div id="group-funcion" hidden>
+                    <div class="field">
+                        <label for="function-input">Función f(x)</label>
+                        <input type="text" id="function-input" placeholder="Ejemplo: x**2*sin(x+3)/(1+e**(3*x))" autocomplete="off">
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="point-a">Punto inicial a</label>
+                            <input type="text" id="point-a" inputmode="decimal" placeholder="Ejemplo: 1" autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label for="point-b">Punto final b</label>
+                            <input type="text" id="point-b" inputmode="decimal" placeholder="Ejemplo: 1.8" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="point-count">Número de nodos</label>
+                        <input type="text" id="point-count" inputmode="numeric" placeholder="Ejemplo: 5 (entre 2 y 60)" autocomplete="off">
+                    </div>
+                    <p class="formula-hint">
+                        Se toman N nodos equiespaciados entre a y b (incluyendo ambos extremos), con
+                        h = (b − a)/(N − 1). Como se conoce f(x), la derivada exacta se calcula de forma
+                        simbólica y se muestra el error real, la extrapolación de Richardson y el análisis del paso h.
+                    </p>
+                </div>
+
+                <div class="field">
+                    <label for="point-x0" id="x0-label">Nodo x₀ donde derivar</label>
+                    <input type="text" id="point-x0" inputmode="decimal" placeholder="Ejemplo: 1.4" autocomplete="off">
+                </div>
+
+                <div class="field">
+                    <span class="field-label" id="method-label">Fórmula</span>
+                    <div class="segmented segmented--wrap" id="method-selector" role="group" aria-labelledby="method-label">
+                        <button type="button" class="segmented__btn is-active" data-metodo="auto" aria-pressed="true">Automática</button>
+                        <button type="button" class="segmented__btn" data-metodo="2p" aria-pressed="false">2 puntos</button>
+                        <button type="button" class="segmented__btn" data-metodo="2pc" aria-pressed="false">2 pts centrada</button>
+                        <button type="button" class="segmented__btn" data-metodo="3p" aria-pressed="false">3 puntos</button>
+                        <button type="button" class="segmented__btn" data-metodo="5p" aria-pressed="false">5 puntos</button>
+                    </div>
+                </div>
+
+                <p class="formula-hint" id="method-hint"></p>
+
+                <div class="field" id="position-field" hidden>
+                    <span class="field-label" id="position-label">Posición de x₀ en la fórmula</span>
+                    <div class="segmented segmented--wrap" id="position-selector" role="group" aria-labelledby="position-label"></div>
+                </div>
+
+                <button class="btn" id="calcular-derivacion" type="button">Calcular solución</button>
+                <button class="btn btn--ghost btn--small" id="cargar-ejemplo" type="button">Cargar ejemplo</button>
+            </section>
+
+            <!-- Resultado (debajo de la configuración) -->
+            <section class="result-panel split-layout__result" aria-live="polite">
+                <h2>Resultado</h2>
+                <p id="result"></p>
+                <p id="error-message" class="error-text"></p>
+
+                <div id="derivacion-detalle" hidden>
+                    <p class="result-note" id="note-estimado" hidden></p>
+                    <p class="result-note" id="note-exacta" hidden></p>
+                    <p class="result-note" id="note-richardson" hidden></p>
+                    <p class="result-note" id="note-optimos" hidden></p>
+                    <p class="result-note" id="note-aviso" hidden></p>
+
+                    <h3 class="subsection__title">Derivar en otro nodo</h3>
+                    <div class="segmented segmented--wrap" id="node-selector" role="group" aria-label="Nodos de la tabla"></div>
+
+                    <div class="poly-header">
+                        <h3 class="subsection__title">Exportar</h3>
+                        <span>
+                            <button class="btn btn--ghost btn--small" id="copiar-resultado" type="button">Copiar resultado</button>
+                            <button class="btn btn--ghost btn--small" id="descargar-csv" type="button">Descargar CSV</button>
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+          </div>
+
+          <!-- Columna derecha: gráficas y, debajo, el procedimiento paso a paso -->
+          <div class="split-layout__col">
+
+            <!-- Gráfica 1: f(x) y recta tangente -->
+            <section class="panel split-layout__graph" aria-labelledby="graph-title">
+                <h2 id="graph-title">Gráfica: f(x) y recta tangente en x₀</h2>
+                <p class="graph-empty" id="graph-empty">La gráfica aparecerá aquí al calcular la solución.</p>
+                <div class="graph-frame" id="graph-frame" hidden>
+                    <svg id="graph-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
+                <div class="graph-legend" id="graph-legend"></div>
+            </section>
+
+            <!-- Gráfica 2: derivada numérica contra la exacta -->
+            <section class="panel split-layout__graph" aria-labelledby="graph2-title">
+                <h2 id="graph2-title">Gráfica: f′(x) numérica en los nodos</h2>
+                <p class="graph-empty" id="graph2-empty">Aquí se verá la derivada numérica de cada nodo (y la exacta si se conoce).</p>
+                <div class="graph-frame" id="graph2-frame" hidden>
+                    <svg id="graph2-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
+                <div class="graph-legend" id="graph2-legend"></div>
+            </section>
+
+            <!-- Gráfica 3: error contra h (solo con función) -->
+            <section class="panel split-layout__graph" id="graph3-panel" aria-labelledby="graph3-title" hidden>
+                <h2 id="graph3-title">Gráfica: error vs. paso h (log₁₀ – log₁₀)</h2>
+                <p class="steps-description">
+                    Eje x: log₁₀(h). Eje y: log₁₀(error). La curva baja al achicar h (truncamiento) y vuelve a
+                    subir cuando domina el error de redondeo; el mínimo es el mejor h.
+                </p>
+                <div class="graph-frame" id="graph3-frame">
+                    <svg id="graph3-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
+                <div class="graph-legend" id="graph3-legend"></div>
+            </section>
+
+            <!-- Procedimiento paso a paso (debajo de las gráficas; en celular va al final) -->
+            <section class="panel split-layout__steps" id="steps-panel" aria-labelledby="steps-title" hidden>
+                <h2 id="steps-title">Procedimiento paso a paso</h2>
+                <div id="steps-sections"></div>
+            </section>
+
+          </div>
+
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/tabla-pasos.js"></script>
+    <script src="js/grafica.js"></script>
+    <script src="js/derivacion-numerica.js"></script>
+</body>
+</html>

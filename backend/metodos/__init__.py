@@ -36,6 +36,8 @@ MODULOS = [
     'trapecio_simpsons',
     # Splines
     'spline_cubico',
+    # Derivación numérica
+    'derivacion_numerica',
     # Ecuaciones diferenciales
     'euler',
     'taylor',
