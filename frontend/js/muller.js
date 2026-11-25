@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.errorAproximado,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaMuller.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
             mostrarResultado(error.message, true);
+            GraficaMuller.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

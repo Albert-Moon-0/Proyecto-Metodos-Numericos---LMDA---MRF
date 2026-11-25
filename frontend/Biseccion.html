@@ -25,7 +25,9 @@
             <p class="page-header__kicker">Método iterativo</p>
             <h1>Método de Bisección</h1>
             <p class="page-header__intro">
-                Método numérico para encontrar raíces de funciones continuas en un intervalo dado.
+                Combina bisección y secante: usa la intersección de la recta secante
+                entre (a, f(a)) y (b, f(b)) para generar la nueva raíz, conservando
+                siempre un intervalo [a, b] donde f(a)·f(b) &lt; 0.
             </p>
         </header>
 
@@ -40,7 +42,7 @@
             <div class="field-row">
                 <div class="field">
                     <label for="point-a">Punto a</label>
-                    <input type="text" id="point-a" placeholder="Ejemplo: 0">
+                    <input type="text" id="point-a" placeholder="Ejemplo: 1">
                 </div>
                 <div class="field">
                     <label for="point-b">Punto b</label>
@@ -48,7 +50,7 @@
                 </div>
                 <div class="field">
                     <label for="tolerance">Error máximo</label>
-                    <input type="text" id="tolerance" placeholder="Ejemplo: 0.0001">
+                    <input type="text" id="tolerance" placeholder="Ejemplo: 0.001">
                 </div>
                 <div class="field">
                     <label for="max-iterations">Iteraciones máximas</label>
@@ -57,6 +59,21 @@
             </div>
 
             <button class="btn" id="calcular-biseccion" type="button">Calcular raíz</button>
+        </section>
+
+        <!-- Gráfica: cambio de signo del intervalo en cada iteración -->
+        <section class="panel panel--grafica" aria-labelledby="graph-title">
+            <h2 id="graph-title">Gráfica: f(x) y cambio de signo</h2>
+            <p class="graph-empty" id="graph-empty">La gráfica aparecerá aquí al calcular la raíz.</p>
+            <div class="graph-frame" id="graph-frame" hidden>
+                <svg id="graph-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <div class="graph-controls" id="graph-controls" hidden>
+                <button class="btn btn--ghost btn--small" id="graph-play" type="button">▶ Animar</button>
+                <input type="range" id="graph-iter" min="1" max="1" value="1" aria-label="Iteración mostrada en la gráfica">
+                <span class="graph-controls__texto" id="graph-iter-texto"></span>
+            </div>
+            <div class="graph-legend" id="graph-legend"></div>
         </section>
 
         <section class="panel" aria-labelledby="table-title">
@@ -71,7 +88,7 @@
                             <th>c</th>
                             <th>f(c)</th>
                             <th>Error absoluto</th>
-                            <th>Error aproximado (%)</th>
+                            <th>Error aproximado</th>
                         </tr>
                     </thead>
                     <tbody id="result-table-body">
@@ -90,6 +107,8 @@
 
     <script src="js/api.js"></script>
     <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/graficas/grafica-svg.js"></script>
+    <script src="js/graficas/grafica-biseccion.js"></script>
     <script src="js/biseccion.js"></script>
 </body>
 </html>

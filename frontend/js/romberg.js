@@ -69,9 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const resultado = await llamarApi('/api/romberg/calcular', leerDatos());
             TablaPasos.pintar(contenedorTabla, [construirSeccion(resultado.iteraciones)]);
             mostrarResultado(resultado.mensaje);
+            GraficaRomberg.mostrar(resultado);
         } catch (error) {
             contenedorTabla.innerHTML = '';
             mostrarResultado(error.message, true);
+            GraficaRomberg.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

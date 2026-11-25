@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.residuo,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaDeflacion.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
             mostrarResultado(error.message, true);
+            GraficaDeflacion.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

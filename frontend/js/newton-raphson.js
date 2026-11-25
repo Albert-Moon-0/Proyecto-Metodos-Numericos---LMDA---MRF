@@ -33,8 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.errorAproximado,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaNewton.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
+            GraficaNewton.limpiar();
             mostrarResultado(error.message, true);
         } finally {
             botonCalcular.disabled = false;

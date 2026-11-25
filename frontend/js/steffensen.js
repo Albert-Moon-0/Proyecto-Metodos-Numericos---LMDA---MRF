@@ -24,9 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.errorAproximado,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaSteffensen.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
             mostrarResultado(error.message, true);
+            GraficaSteffensen.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

@@ -24,9 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.errorAproximado,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaFalsaPosicion.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
             mostrarResultado(error.message, true);
+            GraficaFalsaPosicion.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

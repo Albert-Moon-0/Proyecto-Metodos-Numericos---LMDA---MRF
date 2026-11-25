@@ -107,10 +107,27 @@
             <p id="result"></p>
             <p id="error-message" class="error-text"></p>
         </section>
+
+        <section class="panel panel--grafica" aria-labelledby="graph-title">
+            <h2 id="graph-title">Gráfica</h2>
+            <p class="graph-empty" id="graph-empty">La gráfica aparecerá aquí al calcular la raíz.</p>
+            <div class="graph-frame" id="graph-frame" hidden>
+                <svg id="graph-svg" class="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <div class="graph-controls" id="graph-controls" hidden>
+                <button class="btn btn--ghost btn--small" id="graph-play" type="button">▶ Animar</button>
+                <input type="range" id="graph-iter" min="1" max="1" value="1" aria-label="Iteración mostrada en la gráfica">
+                <span class="graph-controls__texto" id="graph-iter-texto"></span>
+            </div>
+            <div class="graph-legend" id="graph-legend"></div>
+        </section>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/tablas-y-recursos.js"></script>
+    <script src="js/graficas/grafica-svg.js"></script>
+    <script src="js/graficas/grafica-comun.js"></script>
+    <script src="js/graficas/grafica-integracion.js"></script>
     <script src="js/trapecio-simpsons.js"></script>
 </body>
 </html>

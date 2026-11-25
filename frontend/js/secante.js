@@ -22,9 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fila.error,
             ]);
             mostrarResultado(resultado.mensaje);
+            GraficaSecante.mostrar(resultado);
         } catch (error) {
             limpiarTabla();
             mostrarResultado(error.message, true);
+            GraficaSecante.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }

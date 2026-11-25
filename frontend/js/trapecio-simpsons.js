@@ -225,8 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const resultado = await llamarApi('/api/trapecio_simpsons/calcular', leerDatos());
             mostrarResultado(resultado.mensaje);
+            GraficaIntegracion.mostrar(resultado);
         } catch (error) {
             mostrarResultado(error.message, true);
+            GraficaIntegracion.limpiar();
         } finally {
             botonCalcular.disabled = false;
         }
