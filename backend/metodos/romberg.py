@@ -32,7 +32,8 @@ from metodos.comun.parser_funciones import (
     crear_funcion,
 )
 from metodos.trapecio_simpsons import REGLAS, calcular_compuesto
-
+from metodos.comun.grafica import armar_grafica_romberg
+ 
 blueprint = Blueprint('romberg', __name__, url_prefix='/api/romberg')
 
 # 2^15 = 32768 subintervalos en la última fila: suficiente para cualquier
@@ -116,13 +117,18 @@ def calcular():
                 'Aumenta las iteraciones o el error máximo.'
             )
 
-        return jsonify({
-            'aproximacion': aproximacion,
-            'errorEstimado': ultima['error'],
-            'convergio': convergio,
-            'iteraciones': filas,
-            'mensaje': mensaje,
-        })
+        respuesta = {
+            'aproximacion': aproximacion, 'errorEstimado': ultima['error'],
+            'convergio': convergio, 'iteraciones': filas, 'mensaje': mensaje,
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_romberg(f, a, b, filas)
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta)
+    
     except (ErrorRomberg, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

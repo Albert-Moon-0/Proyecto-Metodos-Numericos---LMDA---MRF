@@ -37,6 +37,7 @@ import re
 from flask import Blueprint, jsonify, request
 
 from metodos.muller import ErrorMuller, calcular_muller
+from metodos.comun.grafica import armar_grafica_deflacion
 
 blueprint = Blueprint('deflacion', __name__, url_prefix='/api/deflacion')
 
@@ -217,11 +218,19 @@ def calcular():
 
         mensaje = f'Se encontraron {len(raices)} raíces de un polinomio de grado {grado_original}.'
 
-        return jsonify({
+        respuesta = {
             'grado': grado_original,
             'mensaje': mensaje,
             'raices': raices,
-        })
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_deflacion(coeficientes, raices)
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta)
+    
     except (ErrorDeflacion, ErrorMuller) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

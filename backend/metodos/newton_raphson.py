@@ -20,6 +20,7 @@ from flask import Blueprint, jsonify, request
 
 from metodos.comun.derivador import ErrorDerivada, crear_funcion_y_derivada
 from metodos.comun.parser_funciones import ErrorFuncion
+from metodos.comun.grafica import armar_grafica_sucesion    
 
 blueprint = Blueprint('newton_raphson', __name__, url_prefix='/api/newton-raphson')
 
@@ -107,12 +108,21 @@ def calcular():
                  f'Mejor aproximación: x ≈ {raiz:.6f}'
         )
 
-        return jsonify({
+        respuesta = {
             'raiz': raiz,
             'convergio': convergio,
             'mensaje': mensaje,
             'iteraciones': iteraciones,
-        })
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_sucesion(f, p0, iteraciones, claves=('p1',))
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        
+        return jsonify(respuesta)
+
     except (ErrorNewtonRaphson, ErrorDerivada, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

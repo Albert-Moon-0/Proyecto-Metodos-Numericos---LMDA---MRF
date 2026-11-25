@@ -34,6 +34,7 @@ import math
 from flask import Blueprint, jsonify, request
 
 from metodos.comun.parser_funciones import ErrorFuncion, _leer_numero, crear_funcion
+from metodos.comun.grafica import armar_grafica_integracion, nodos_equiespaciados
 
 blueprint = Blueprint('trapecio_simpsons', __name__, url_prefix='/api/trapecio_simpsons')
 
@@ -180,6 +181,7 @@ def calcular():
             valor, h = calcular_simple(regla, f, a, b)
             detalle = f'h = {h:g}'
             subintervalos = regla['grupo']
+            xs_grafica = nodos_equiespaciados(a, b, regla['grupo'])
         else:
             xs = _leer_puntos(datos.get('xs'))
 
@@ -187,20 +189,24 @@ def calcular():
             valor, h, subintervalos = calcular_compuesto(regla, f, xs)
             detalle = f'h = {h:g}, ' if h is not None else 'espaciado irregular, '
             detalle += f'{subintervalos} subintervalos'
+            xs_grafica = xs
 
         if not math.isfinite(valor):
             raise ErrorIntegracion('El resultado no es un número finito. Revisa f(x) en el intervalo.')
 
         mensaje = f'∫ f(x) dx ≈ {valor:.6f}  ({regla["nombre"]} {tipo}, {detalle})'
 
-        return jsonify({
-            'aproximacion': valor,
-            'h': h,
-            'subintervalos': subintervalos,
-            'regla': clave_regla,
-            'tipo': tipo,
-            'mensaje': mensaje,
-        })
+        respuesta = {
+            'aproximacion': valor, 'h': h, 'subintervalos': subintervalos,
+            'regla': clave_regla, 'tipo': tipo, 'mensaje': mensaje,
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_integracion(f, xs_grafica, regla['grupo'])
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta)
     except (ErrorIntegracion, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

@@ -19,6 +19,7 @@ import math
 from flask import Blueprint, jsonify, request
 
 from metodos.comun.parser_funciones import ErrorFuncion, crear_funcion
+from metodos.comun.grafica import armar_grafica_dos_puntos 
 
 blueprint = Blueprint('falsa_posicion', __name__, url_prefix='/api/falsa-posicion')
 
@@ -122,12 +123,20 @@ def calcular():
                  f'Mejor aproximación: x ≈ {raiz:.6f}'
         )
 
-        return jsonify({
+        respuesta = {
             'raiz': raiz,
             'convergio': convergio,
             'mensaje': mensaje,
             'iteraciones': iteraciones,
-        })
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_dos_puntos(f, iteraciones)     
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta)
+    
     except (ErrorFalsaPosicion, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

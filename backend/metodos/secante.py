@@ -14,6 +14,7 @@ import math
 from flask import Blueprint, jsonify, request
 
 from metodos.comun.parser_funciones import ErrorFuncion, crear_funcion
+from metodos.comun.grafica import armar_grafica_dos_puntos 
 
 blueprint = Blueprint('secante', __name__, url_prefix='/api/secante')
 
@@ -66,6 +67,8 @@ def calcular_secante(f, p0, p1, tolerancia, max_iteraciones):
             'p0': p0,
             'p1': p1,
             'p2': p2,
+            'fp0': fp0,
+            'fp1': fp1,
             'fp2': fp2,
             'error': error,
         })
@@ -104,12 +107,22 @@ def calcular():
                  f'Mejor aproximación: x ≈ {raiz:.6f}'
         )
 
-        return jsonify({
+        respuesta = {
             'raiz': raiz,
             'convergio': convergio,
             'mensaje': mensaje,
             'iteraciones': iteraciones,
-        })
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_dos_puntos(
+                f, iteraciones, claves=('p0', 'p1', 'p2')
+            )
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta) 
+    
     except (ErrorSecante, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método

@@ -42,6 +42,7 @@ import math
 from flask import Blueprint, jsonify, request
 
 from metodos.comun.parser_funciones import ErrorFuncion, crear_funcion
+from metodos.comun.grafica import armar_grafica_muller
 
 blueprint = Blueprint('muller', __name__, url_prefix='/api/muller')
 
@@ -207,12 +208,20 @@ def calcular():
                  f'Mejor aproximación: x ≈ {_formatear_valor(raiz)}'
         )
 
-        return jsonify({
+        respuesta = {
             'raiz': _valor_json(raiz),
             'convergio': convergio,
             'mensaje': mensaje,
             'iteraciones': iteraciones,
-        })
+        }
+
+        try:
+            respuesta['grafica'] = armar_grafica_muller(f, iteraciones)
+        except Exception:  # noqa: BLE001
+            respuesta['grafica'] = None
+
+        return jsonify(respuesta)
+    
     except (ErrorMuller, ErrorFuncion) as error:
         return jsonify({'error': str(error)}), 400
     except Exception as error:  # noqa: BLE001 - aislar errores de este método
